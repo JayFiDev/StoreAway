@@ -13,6 +13,7 @@ struct MainView: View {
   let input = InputHandler()
   @EnvironmentObject var userData: UserData
   @State private var showingAlert = false
+  @State private var hovering = false
   
   var body: some View {
     
@@ -34,14 +35,17 @@ struct MainView: View {
             
             
           }
-          .foregroundColor(.accentColor)
+          .foregroundColor(hovering ? .accentColor : .gray)
           .frame(width: 200, height: 200)
           .alert(isPresented: $showingAlert) {
                       Alert(title: Text("Nothing to do"), message: Text("Please add watched folders and mappings in Preferences"), dismissButton: .default(Text("Ok")))
                   }
         
           Text("Store away").font(.title)
-      }
+      }.onHover(perform: { h in
+        self.hovering = h
+      })
+      
         
     }.frame(width: 300, height: 300, alignment: .center)
     

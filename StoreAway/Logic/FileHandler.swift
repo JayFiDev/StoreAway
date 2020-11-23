@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 class FileHandler {
   
@@ -24,7 +25,6 @@ class FileHandler {
     return file_url
   }
   
-  
   func copy(data : UserData){
     
     for folder in data.watchedFolders {
@@ -32,6 +32,7 @@ class FileHandler {
         for n in map.name {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
+            
             copyFileToFolder(file: file, destination: map.path)
           }
         }
@@ -39,7 +40,6 @@ class FileHandler {
     }
   }
   
-
   func move(data : UserData){
     for folder in data.watchedFolders {
       for map in data.mappingData {
@@ -54,13 +54,51 @@ class FileHandler {
     }
   }
   
+  func dialog(question: String, text: String) -> NSApplication.ModalResponse {
+      let alert = NSAlert()
+      alert.messageText = question
+      alert.informativeText = text
+      alert.alertStyle = .critical
+      alert.addButton(withTitle: "Overwrite")
+      alert.addButton(withTitle: "Rename & Copy")
+      alert.addButton(withTitle: "Ignore file")
+      return alert.runModal()
+  }
 
-  
   func copyFileToFolder(file: URL, destination: URL){
     do{
+      var filename = file.lastPathComponent
+      var destination_path = (destination.appendingPathComponent(filename)).path
       
-      let filename = file.lastPathComponent
-      try fm.copyItem(atPath: file.path, toPath: (destination.appendingPathComponent(filename)).path)
+      if fm.fileExists(atPath: destination_path)
+      {
+        let answer = dialog(question: filename + " exists", text: "Replace File?")
+        
+        switch answer {
+          case .alertFirstButtonReturn:
+            try? fm.removeItem(atPath: destination_path)
+            
+          case .alertSecondButtonReturn:
+            var counter = 0
+            repeat{
+              counter += 1
+              let ext = file.pathExtension
+              let temp = file.deletingPathExtension().lastPathComponent
+              filename = temp + " " + String(counter) + "." + ext
+              destination_path = (destination.appendingPathComponent(filename)).path
+              print(filename)
+            }while(fm.fileExists(atPath: destination_path))
+            
+          case .alertThirdButtonReturn:
+            return
+            
+          default:
+            print("default")
+        }
+        
+      }
+      
+      try fm.copyItem(atPath: file.path, toPath: destination_path)
     }
     catch{
       print("copy - this did not work")
