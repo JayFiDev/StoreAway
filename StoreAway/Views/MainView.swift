@@ -16,6 +16,31 @@ struct MainView: View {
   @State private var hovering = false
   @State private var isRunning = false
   
+  
+  fileprivate func onTappedCircle() {
+    if isRunning {
+      return
+    }
+    if userData.watchedFolders.count > 0
+        && userData.mappingData.count > 0 {
+      
+      isRunning = true
+      
+      DispatchQueue.global().async {
+        filehandler.action(data: userData)
+  
+        DispatchQueue.main.async  {
+          self.isRunning = false
+          self.userData.updateStats()
+        }
+      }
+      
+    } else
+    {
+      self.showingAlert = true
+    }
+  }
+
   var body: some View {
     
     
@@ -23,6 +48,7 @@ struct MainView: View {
       
       HStack {
         ZStack{
+          
           Circle()
             .foregroundColor(hovering ? .accentColor : .gray)
             .frame(width: 200, height: 200)
@@ -32,6 +58,7 @@ struct MainView: View {
           
           if isRunning{
             ProgressView()
+              .scaleEffect(1.25, anchor: .center)
           }else{
             Text("Store away").font(.title)
           }
@@ -43,27 +70,18 @@ struct MainView: View {
           hovering = h
         })
         .onTapGesture {
-          if userData.watchedFolders.count > 0
-              && userData.mappingData.count > 0 {
-            
-            isRunning = true
-
-            DispatchQueue.global().async {
-              filehandler.action(data: userData)
-              
-              
-              DispatchQueue.main.async  {
-                self.isRunning = false
-                self.userData.updateStats()
-              }
-            }
-            
-          } else
-          {
-            self.showingAlert = true
-          }
+          onTappedCircle()
         }
         .padding(.horizontal)
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         if userData.detailViewEnabled{
@@ -75,7 +93,7 @@ struct MainView: View {
       }
       
       
-      
+
       
     }.frame(width: userData.detailViewEnabled ? 700 : 300, height: 300, alignment: .center)
     
