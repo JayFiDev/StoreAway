@@ -8,65 +8,35 @@
 import Foundation
 import SwiftUI
 
+struct Stats : Hashable {
+  var filetypes : [String]
+  var numberOfFiles: Int
+  var size : UInt64
+  var sizeString : String
+}
+
 class FileHandler {
   
   let fm = FileManager.default
   
-  
-  func getFilesInFolder( path: URL, filetype: String) -> [URL] {
-    let enumerator = fm.enumerator(atPath: path.path)
-    let files = (enumerator?.allObjects as! [String]).filter{$0.lowercased().contains(filetype.lowercased())}
+  func action(data : UserData){
     
-    var file_url : [URL] = []
-    for f in files{
-      let path = URL(fileURLWithPath: path.path).appendingPathComponent(f)
-      file_url.append(path)
-    }
-    return file_url
-  }
-  
-  func copy(data : UserData){
     
     for folder in data.watchedFolders {
       for map in data.mappingData {
         for n in map.name {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
-            
-            copyFileToFolder(file: file, destination: map.path)
+            actionFileToFolder(file: file, destination: map.path, copy: data.copyObjects)
           }
         }
       }
     }
   }
   
-  func move(data : UserData){
-    for folder in data.watchedFolders {
-      for map in data.mappingData {
-        for n in map.name {
-          let files = getFilesInFolder(path: folder, filetype: n)
-          for file in files {
-            moveFileToFolder(file: file, destination: map.path)
-          }
-        }
-        
-      }
-    }
-  }
-  
-  func dialog(question: String, text: String) -> NSApplication.ModalResponse {
-      let alert = NSAlert()
-      alert.messageText = question
-      alert.informativeText = text
-      alert.alertStyle = .critical
-      alert.addButton(withTitle: "Overwrite")
-      alert.addButton(withTitle: "Rename & Copy")
-      alert.addButton(withTitle: "Ignore file")
-      return alert.runModal()
-  }
-
-  func copyFileToFolder(file: URL, destination: URL){
-    do{
+  func actionFileToFolder(file: URL, destination: URL, copy: Bool){
+    
+      
       var filename = file.lastPathComponent
       var destination_path = (destination.appendingPathComponent(filename)).path
       
@@ -86,7 +56,6 @@ class FileHandler {
               let temp = file.deletingPathExtension().lastPathComponent
               filename = temp + " " + String(counter) + "." + ext
               destination_path = (destination.appendingPathComponent(filename)).path
-              print(filename)
             }while(fm.fileExists(atPath: destination_path))
             
           case .alertThirdButtonReturn:
@@ -97,22 +66,78 @@ class FileHandler {
         }
         
       }
+    do{
+      if copy {
+        try fm.copyItem(atPath: file.path, toPath: destination_path)
+      } else {
+        try fm.moveItem(atPath: file.path, toPath: destination_path)
+      }
       
-      try fm.copyItem(atPath: file.path, toPath: destination_path)
     }
     catch{
-      print("copy - this did not work")
+      print("actionFileToFolder - this did not work")
     }
   }
   
-  func moveFileToFolder(file: URL, destination: URL){
-    do{
-      let filename = file.lastPathComponent
-      try fm.moveItem(atPath: file.path, toPath: (destination.appendingPathComponent(filename)).path)
+  func getFilesInFolder( path: URL, filetype: String) -> [URL] {
+    
+    let resourceKeys = Set<URLResourceKey>([.nameKey])
+    let enumerator = fm.enumerator(at: path, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)
+    let files = (enumerator?.allObjects as! [URL]).filter{$0.pathExtension.contains(filetype.lowercased())}
+    
+    return files
+     
+  }
+    
+  func dialog(question: String, text: String) -> NSApplication.ModalResponse {
+    let alert = NSAlert()
+    alert.messageText = question
+    alert.informativeText = text
+    alert.alertStyle = .critical
+    alert.addButton(withTitle: "Overwrite")
+    alert.addButton(withTitle: "Rename & Copy")
+    alert.addButton(withTitle: "Ignore file")
+    return alert.runModal()
+  }
+  
+  func getStats(folders : [URL], mappings: [Mapping]) -> [Stats] {
+    
+    var stats : [Stats] = []
+    var size : UInt64  = 0
+    var counter = 0
+    
+    for map in mappings {
+      counter = 0
+      size = 0
+      for folder in folders{
+        for n in map.name {
+          let files = getFilesInFolder(path: folder, filetype: n)
+          for file in files {
+            counter += 1
+            let fileAttributes = try? FileManager.default.attributesOfItem(atPath: file.path)
+            if let fileSize = fileAttributes![FileAttributeKey.size] {
+              size += fileSize as! UInt64
+            }
+          }
+        }
+      }
+
+      stats.append(Stats(filetypes: map.name, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
     }
-    catch{
-      print("move - this did not work")
+    
+    return stats
+
+  }
+  
+  func sizeToString(size: UInt64) -> String {
+    var value: Double = Double(size)
+    var factor = 0
+    let tokens = ["bytes", "KB", "MB", "GB", "TB"]
+    while value > 1024 {
+      value /= 1024
+      factor += 1
     }
+    return String(format: "%4.1f %@", value, tokens[factor])
   }
   
 }

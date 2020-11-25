@@ -9,15 +9,21 @@ import SwiftUI
 
 struct SettingsView: View {
   
+
+  @EnvironmentObject var userData: UserData
   let filehandler = FileHandler()
   let input = InputHandler()
-  @EnvironmentObject var userData: UserData
   
-
   
   var body: some View {
     
     TabView {
+      
+      SettingsGeneralView()
+      .tabItem {
+              Image(systemName: "gear").imageScale(.large)
+              Text("General")
+      }
       
       SettingsMappingView()
       .tabItem {
@@ -31,11 +37,7 @@ struct SettingsView: View {
               Text("Watched Folders")
       }
     
-    }
-    
-    
-    
-    
+    }.frame(minWidth: 400)
     
   }
   

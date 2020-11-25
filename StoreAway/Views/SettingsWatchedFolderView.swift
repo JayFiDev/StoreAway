@@ -17,21 +17,12 @@ struct SettingsWatchedFolderView: View {
   var body: some View {
     VStack {
       
-//      HStack {
-//        //Text("Mappings").font(.title)
-//        Label(
-//          title: { Text("Watched Folders") },
-//          icon: { Image(systemName: "folder") }
-//        ).font(.title3)
-//        Spacer()
-//      }.padding([.top, .leading])
-      
       List(userData.watchedFolders, id: \.self, selection: $selection) { name in
         Text(name.path)
       }.frame(width: 400,
               height: self.userData.watchedFolders.count > 5 ? 150 : 10 + self.userData.watchedFolders.reduce(0) { i, _ in i + 30 },
               alignment: .center)
-      .animation(.default)
+      
       
       HStack {
         Button(action: {

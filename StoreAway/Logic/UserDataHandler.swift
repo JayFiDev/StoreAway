@@ -6,17 +6,66 @@
 //
 import Foundation
 
+
 class UserData : ObservableObject {
   
-  @Published var watchedFolders : [URL] = []
-  @Published var mappingData : [Mapping] = []
+  let fh = FileHandler()
+  
+  @Published var watchedFolders : [URL] = []{
+    didSet {
+      updateStats()
+    }
+  }
+  
+  @Published var mappingData : [Mapping] = []{
+    didSet {
+      updateStats()
+    }
+  }
+  
+  
+  @Published var detailViewEnabled : Bool = false {
+    didSet {
+      UserDefaults.standard.set(detailViewEnabled, forKey: "DetailView")
+    }
+  }
+  
+  @Published var copyObjects : Bool = false{
+    didSet {
+      UserDefaults.standard.set(copyObjects, forKey: "CopyOnly")
+    }
+  }
+  
+  @Published var askEveryFile : Bool = false{
+    didSet {
+      UserDefaults.standard.set(askEveryFile, forKey: "AskEveryFileDialog")
+    }
+  }
+  
+  
+  
+  @Published var statistics : [Stats] = []
+  
+  
   
   init(){
     watchedFolders = loadURL()
     mappingData = loadMapping()
+    readSettings()
+    
+    statistics = fh.getStats(folders: watchedFolders, mappings: mappingData)
   }
-
-
+  
+  func updateStats(){
+    statistics = fh.getStats(folders: watchedFolders, mappings: mappingData)
+  }
+  
+  func readSettings(){
+    detailViewEnabled = UserDefaults.standard.bool(forKey: "DetailView")
+    copyObjects = UserDefaults.standard.bool(forKey: "CopyOnly" )
+    askEveryFile = UserDefaults.standard.bool(forKey: "AskEveryFileDialog")
+  }
+  
   func addMapping(name: [String], path: URL)
   {
     mappingData.append(Mapping(id: UUID(), name: name, path: path))
@@ -40,7 +89,6 @@ class UserData : ObservableObject {
     if let data = UserDefaults.standard.object(forKey: "Mapping") as? Data {
       let decoder = JSONDecoder()
       if let temp = try? decoder.decode([Mapping].self, from: data) {
-        print(temp.count)
         return temp
       }
     }
@@ -71,7 +119,6 @@ class UserData : ObservableObject {
     if let data = UserDefaults.standard.object(forKey: "WatchedFolders") as? Data {
       let decoder = JSONDecoder()
       if let temp = try? decoder.decode([URL].self, from: data) {
-        print(temp.count)
         return temp
       }
     }
