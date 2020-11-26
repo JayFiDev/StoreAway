@@ -30,7 +30,7 @@ struct MainView: View {
       
       DispatchQueue.global().async {
         filehandler.action(data: userData)
-  
+        
         DispatchQueue.main.async  {
           self.isRunning = false
           self.userData.updateStats()
@@ -42,15 +42,14 @@ struct MainView: View {
       self.showingAlert = true
     }
   }
-
+  
   var body: some View {
     
     
-    VStack{
+    HStack{
       
-      HStack {
+      VStack{
         ZStack{
-          
           Circle()
             .foregroundColor(hovering ? .accentColor : .gray)
             .frame(width: 200, height: 200)
@@ -65,7 +64,6 @@ struct MainView: View {
             Text("Store away").font(.title)
           }
           
-          
         }
         .contentShape(Circle())
         .onHover(perform: { h in
@@ -76,38 +74,34 @@ struct MainView: View {
         }
         .padding(.horizontal)
         
-        if userData.detailViewEnabled{
-          
-          MainDetailView()
-            .padding(.leading)
-          
-        }
-      }
-      
-      ZStack{
-        
-        Circle()
-          .foregroundColor(hoveringPreview ? .accentColor : .gray)
-          .frame(width: 80, height: 80)
-          .sheet(isPresented: $showPreview) {
-            PreviewView()
-        }
         
         
+        
+        ZStack{
+          Circle()
+            .foregroundColor(hoveringPreview ? .accentColor : .gray)
+            .frame(width: 80, height: 80)
+            .sheet(isPresented: $showPreview) {
+              PreviewView()
+            }
           Text("Preview").font(.title2)
-        
-        
+        }
+        .contentShape(Circle())
+        .onHover(perform: { h in
+          hoveringPreview = h
+        })
+        .onTapGesture {
+          showPreview = true
+        }
+        .padding(.horizontal)
         
       }
-      .contentShape(Circle())
-      .onHover(perform: { h in
-        hoveringPreview = h
-      })
-      .onTapGesture {
-        showPreview = true
+      if userData.detailViewEnabled{
+        
+        MainDetailView()
+          .padding(.leading)
+        
       }
-      .padding(.horizontal)
-
       
     }.frame(width: userData.detailViewEnabled ? 700 : 300, height: 350, alignment: .center)
     

@@ -33,7 +33,7 @@ struct PreviewView: View {
       })
       
     }.padding(.all)
-    .frame(width: 750, height: 500, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
+    .frame(width: 900, height: 500, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
     .onAppear(perform: {
       //selectedMapping = userData.mappingData.first
       userData.updatePreviews()
@@ -54,7 +54,7 @@ struct SidebarView: View {
         Text("\(preview.map.name.joined(separator: ", "))")
         }
        .listStyle(SidebarListStyle())
-        .frame(minWidth: 180, idealWidth: 200, maxWidth: 300)
+      .frame(width: 200)
     }
 }
 
@@ -85,6 +85,6 @@ struct DetailView: View {
 
 struct PreviewView_Previews: PreviewProvider {
   static var previews: some View {
-    PreviewView()
+    PreviewView().environmentObject(UserData())
   }
 }
