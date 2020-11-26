@@ -1,5 +1,5 @@
 # Store Away - WORK IN PROGRESS!
-First steps with Swift and SwiftUI on macOS. Application to store files to different destinations by filetype.
+This application allows you to automatically sort files by filetype to different destinations. Select the filetypes and destination you want, specify which folders should be searched for these files and you are good to go.
 
 ## Main View
 Click on the button starts the copy-process - at the moment only copies are generated. Files are not moved.
