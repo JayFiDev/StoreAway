@@ -8,66 +8,67 @@
 import Foundation
 import SwiftUI
 
-struct Stats : Hashable {
-  var filetypes : [String]
-  var numberOfFiles: Int
-  var size : UInt64
-  var sizeString : String
-}
-
 class FileHandler {
   
   let fm = FileManager.default
   
-  func action(data : UserData){
+  func getFilesInFolder( path: URL, filetype: String) -> [URL] {
     
+    let resourceKeys = Set<URLResourceKey>([.nameKey])
+    let enumerator = fm.enumerator(at: path, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)
+    let files = (enumerator?.allObjects as! [URL]).filter{$0.pathExtension.contains(filetype.lowercased())}
+    
+    return files
+    
+  }
+  
+  func action(data : UserData){
     
     for folder in data.watchedFolders {
       for map in data.mappingData {
         for n in map.name {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
-            actionFileToFolder(file: file, destination: map.path, copy: data.copyObjects)
+            actionFileToFolder(file: file, destination: map.path, copyOrMove: data.copyObjects)
           }
         }
       }
     }
   }
   
-  func actionFileToFolder(file: URL, destination: URL, copy: Bool){
+  func actionFileToFolder(file: URL, destination: URL, copyOrMove: Bool){
     
+    var filename = file.lastPathComponent
+    var destination_path = (destination.appendingPathComponent(filename)).path
+    
+    if fm.fileExists(atPath: destination_path)
+    {
+      let answer = dialog(question: filename + " exists", text: "Replace File?")
       
-      var filename = file.lastPathComponent
-      var destination_path = (destination.appendingPathComponent(filename)).path
-      
-      if fm.fileExists(atPath: destination_path)
-      {
-        let answer = dialog(question: filename + " exists", text: "Replace File?")
-        
-        switch answer {
-          case .alertFirstButtonReturn:
-            try? fm.removeItem(atPath: destination_path)
-            
-          case .alertSecondButtonReturn:
-            var counter = 0
-            repeat{
-              counter += 1
-              let ext = file.pathExtension
-              let temp = file.deletingPathExtension().lastPathComponent
-              filename = temp + " " + String(counter) + "." + ext
-              destination_path = (destination.appendingPathComponent(filename)).path
-            }while(fm.fileExists(atPath: destination_path))
-            
-          case .alertThirdButtonReturn:
-            return
-            
-          default:
-            print("default")
-        }
-        
+      switch answer {
+        case .alertFirstButtonReturn:
+          try? fm.removeItem(atPath: destination_path)
+          
+        case .alertSecondButtonReturn:
+          var counter = 0
+          repeat{
+            counter += 1
+            let ext = file.pathExtension
+            let temp = file.deletingPathExtension().lastPathComponent
+            filename = temp + " " + String(counter) + "." + ext
+            destination_path = (destination.appendingPathComponent(filename)).path
+          }while(fm.fileExists(atPath: destination_path))
+          
+        case .alertThirdButtonReturn:
+          return
+          
+        default:
+          print("default")
       }
+      
+    }
     do{
-      if copy {
+      if copyOrMove {
         try fm.copyItem(atPath: file.path, toPath: destination_path)
       } else {
         try fm.moveItem(atPath: file.path, toPath: destination_path)
@@ -79,16 +80,6 @@ class FileHandler {
     }
   }
   
-  func getFilesInFolder( path: URL, filetype: String) -> [URL] {
-    
-    let resourceKeys = Set<URLResourceKey>([.nameKey])
-    let enumerator = fm.enumerator(at: path, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)
-    let files = (enumerator?.allObjects as! [URL]).filter{$0.pathExtension.contains(filetype.lowercased())}
-    
-    return files
-     
-  }
-    
   func dialog(question: String, text: String) -> NSApplication.ModalResponse {
     let alert = NSAlert()
     alert.messageText = question
@@ -99,6 +90,41 @@ class FileHandler {
     alert.addButton(withTitle: "Ignore file")
     return alert.runModal()
   }
+  
+}
+
+//preview functions
+extension FileHandler{
+  
+  func preview(mapping: [Mapping], folders : [URL]) -> [Previews] {
+    
+    var previews : [Previews] = []
+
+    for map in mapping {
+      var pathlist : [PashList] = []
+      
+      for folder in folders {
+        
+        for n in map.name {
+          let files = getFilesInFolder(path: folder, filetype: n)
+          for file in files {
+            
+            let filename = file.lastPathComponent
+            let destination = (map.path.appendingPathComponent(filename))
+            pathlist.append(PashList(oldPath: file, newPath: destination))
+            
+          }
+        }
+      }
+      previews.append(Previews(map: map, pathlist: pathlist ))
+    }
+    return previews
+  }
+  
+}
+
+//statistic functions
+extension FileHandler {
   
   func getStats(folders : [URL], mappings: [Mapping]) -> [Stats] {
     
@@ -121,12 +147,12 @@ class FileHandler {
           }
         }
       }
-
+      
       stats.append(Stats(filetypes: map.name, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
     }
     
     return stats
-
+    
   }
   
   func sizeToString(size: UInt64) -> String {

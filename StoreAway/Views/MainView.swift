@@ -16,6 +16,8 @@ struct MainView: View {
   @State private var hovering = false
   @State private var isRunning = false
   
+  @State private var hoveringPreview = false
+  @State private var showPreview = false
   
   fileprivate func onTappedCircle() {
     if isRunning {
@@ -74,16 +76,6 @@ struct MainView: View {
         }
         .padding(.horizontal)
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         if userData.detailViewEnabled{
           
           MainDetailView()
@@ -92,10 +84,32 @@ struct MainView: View {
         }
       }
       
-      
+      ZStack{
+        
+        Circle()
+          .foregroundColor(hoveringPreview ? .accentColor : .gray)
+          .frame(width: 80, height: 80)
+          .sheet(isPresented: $showPreview) {
+            PreviewView()
+        }
+        
+        
+          Text("Preview").font(.title2)
+        
+        
+        
+      }
+      .contentShape(Circle())
+      .onHover(perform: { h in
+        hoveringPreview = h
+      })
+      .onTapGesture {
+        showPreview = true
+      }
+      .padding(.horizontal)
 
       
-    }.frame(width: userData.detailViewEnabled ? 700 : 300, height: 300, alignment: .center)
+    }.frame(width: userData.detailViewEnabled ? 700 : 300, height: 350, alignment: .center)
     
     
   }

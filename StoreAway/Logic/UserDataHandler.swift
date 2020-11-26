@@ -5,6 +5,7 @@
 //  Created by JayFi on 14.11.20.
 //
 import Foundation
+import SwiftUI
 
 
 class UserData : ObservableObject {
@@ -14,15 +15,20 @@ class UserData : ObservableObject {
   @Published var watchedFolders : [URL] = []{
     didSet {
       updateStats()
+      updatePreviews()
     }
   }
   
   @Published var mappingData : [Mapping] = []{
     didSet {
       updateStats()
+      updatePreviews()
     }
   }
   
+  @Published var previews : [Previews] = []
+  
+  @Published var statistics : [Stats] = []
   
   @Published var detailViewEnabled : Bool = false {
     didSet {
@@ -43,10 +49,7 @@ class UserData : ObservableObject {
   }
   
   
-  
-  @Published var statistics : [Stats] = []
-  
-  
+
   
   init(){
     watchedFolders = loadURL()
@@ -58,6 +61,10 @@ class UserData : ObservableObject {
   
   func updateStats(){
     statistics = fh.getStats(folders: watchedFolders, mappings: mappingData)
+  }
+  
+  func updatePreviews(){
+    previews = fh.preview(mapping: mappingData, folders: watchedFolders)
   }
   
   func readSettings(){
