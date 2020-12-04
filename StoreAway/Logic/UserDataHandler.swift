@@ -48,6 +48,12 @@ class UserData : ObservableObject {
     }
   }
   
+  @Published var keepFolderStructure : Bool = false{
+    didSet {
+      UserDefaults.standard.set(keepFolderStructure, forKey: "keepFolderStructure")
+    }
+  }
+  
   
 
   
@@ -71,6 +77,7 @@ class UserData : ObservableObject {
     detailViewEnabled = UserDefaults.standard.bool(forKey: "DetailView")
     copyObjects = UserDefaults.standard.bool(forKey: "CopyOnly" )
     askEveryFile = UserDefaults.standard.bool(forKey: "AskEveryFileDialog")
+    keepFolderStructure = UserDefaults.standard.bool(forKey: "keepFolderStructure")
   }
   
   func addMapping(name: [String], path: URL)

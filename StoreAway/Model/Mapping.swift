@@ -13,7 +13,5 @@ struct Mapping: Hashable, Codable, Identifiable {
   var name : [String]
   var path : URL
   
-
-  
 }
 

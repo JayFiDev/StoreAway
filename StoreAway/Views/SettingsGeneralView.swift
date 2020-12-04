@@ -35,6 +35,13 @@ struct SettingsGeneralView: View {
         Spacer()
       }
       
+      HStack {
+        Toggle(isOn: $userData.keepFolderStructure) {
+          Text("Keep folder structure")
+        }
+        Spacer()
+      }
+      
     }
     .frame(width: 400)
     .padding([.top, .leading, .bottom])

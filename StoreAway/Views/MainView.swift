@@ -74,9 +74,6 @@ struct MainView: View {
         }
         .padding(.horizontal)
         
-        
-        
-        
         ZStack{
           Circle()
             .foregroundColor(hoveringPreview ? .accentColor : .gray)

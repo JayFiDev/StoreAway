@@ -12,11 +12,24 @@ class FileHandler {
   
   let fm = FileManager.default
   
-  func getFilesInFolder( path: URL, filetype: String) -> [URL] {
+  
+  func getFilesInFolder( path: URL, filetype: String) -> [File] {
+    
+    var files : [File] = []
     
     let resourceKeys = Set<URLResourceKey>([.nameKey])
     let enumerator = fm.enumerator(at: path, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)
-    let files = (enumerator?.allObjects as! [URL]).filter{$0.pathExtension.contains(filetype.lowercased())}
+    let filtered_list = (enumerator?.allObjects as! [URL]).filter{$0.pathExtension.contains(filetype.lowercased())}
+    
+    for item in filtered_list {
+      
+      let filename = item.deletingPathExtension().lastPathComponent
+      let filetype = item.pathExtension
+      let relativePath = item.relativePath(from: path)
+      
+      files.append(File(path: item, relativePath: relativePath != nil ? relativePath! : "", filename: filename, filetype: filetype))
+      
+    }
     
     return files
     
@@ -29,49 +42,64 @@ class FileHandler {
         for n in map.name {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
-            actionFileToFolder(file: file, destination: map.path, copyOrMove: data.copyObjects)
+            actionFileToFolder(file: file, destination: map.path, copyOrMove: data.copyObjects, keepFolderStructure: data.keepFolderStructure)
           }
         }
       }
     }
   }
   
-  func actionFileToFolder(file: URL, destination: URL, copyOrMove: Bool){
+  func actionFileToFolder(file: File, destination: URL, copyOrMove: Bool, keepFolderStructure: Bool){
     
-    var filename = file.lastPathComponent
-    var destination_path = (destination.appendingPathComponent(filename)).path
+    var filename = file.path.lastPathComponent
+    var destination_path = (destination.appendingPathComponent(filename))
     
-    if fm.fileExists(atPath: destination_path)
+    
+    if(keepFolderStructure) //keep sub-folder structure
     {
-      let answer = dialog(question: filename + " exists", text: "Replace File?")
+      destination_path = destination.appendingPathComponent(file.relativePath)
+      
+      let subfolder_path = (destination.appendingPathComponent(file.relativePath)).deletingLastPathComponent()
+      if !fm.fileExists(atPath: subfolder_path.path){
+        try? FileManager.default.createDirectory(at: subfolder_path, withIntermediateDirectories: true, attributes: nil)
+      }
+    }
+    
+    if fm.fileExists(atPath: destination_path.path)
+    {
+      var answer : NSApplication.ModalResponse = .alertThirdButtonReturn
+      
+      DispatchQueue.main.sync { //call dialog from main thread -> exception when called from background thread
+        answer = dialog(question: filename + " exists at " + (destination_path.deletingLastPathComponent()).path + "/", text: "Replace File?")
+      }
       
       switch answer {
         case .alertFirstButtonReturn:
-          try? fm.removeItem(atPath: destination_path)
+          try? fm.removeItem(atPath: destination_path.path)
           
         case .alertSecondButtonReturn:
           var counter = 0
           repeat{
             counter += 1
-            let ext = file.pathExtension
-            let temp = file.deletingPathExtension().lastPathComponent
+            let ext = file.path.pathExtension
+            let temp = file.path.deletingPathExtension().lastPathComponent
             filename = temp + " " + String(counter) + "." + ext
-            destination_path = (destination.appendingPathComponent(filename)).path
-          }while(fm.fileExists(atPath: destination_path))
+            destination_path = (destination.appendingPathComponent(filename))
+          }while(fm.fileExists(atPath: destination_path.path))
           
         case .alertThirdButtonReturn:
           return
           
         default:
-          print("default")
+          return
       }
       
     }
     do{
       if copyOrMove {
-        try fm.copyItem(atPath: file.path, toPath: destination_path)
+        try fm.copyItem(atPath: file.path.path, toPath: destination_path.path)
       } else {
-        try fm.moveItem(atPath: file.path, toPath: destination_path)
+        try fm.moveItem(atPath: file.path.path, toPath: destination_path.path)
       }
       
     }
@@ -93,30 +121,26 @@ class FileHandler {
   
 }
 
+
+
 //preview functions
 extension FileHandler{
   
   func preview(mapping: [Mapping], folders : [URL]) -> [Previews] {
     
     var previews : [Previews] = []
-
+    
     for map in mapping {
-      var pathlist : [PashList] = []
+      var folderList : [Folder] = []
       
       for folder in folders {
         
         for n in map.name {
           let files = getFilesInFolder(path: folder, filetype: n)
-          for file in files {
-            
-            let filename = file.lastPathComponent
-            let destination = (map.path.appendingPathComponent(filename))
-            pathlist.append(PashList(oldPath: file, newPath: destination))
-            
-          }
+          folderList.append(Folder(path: folder, files: files))
         }
       }
-      previews.append(Previews(map: map, pathlist: pathlist ))
+      previews.append(Previews(map: map, folder: folderList))
     }
     return previews
   }
@@ -140,7 +164,7 @@ extension FileHandler {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
             counter += 1
-            let fileAttributes = try? FileManager.default.attributesOfItem(atPath: file.path)
+            let fileAttributes = try? FileManager.default.attributesOfItem(atPath: file.path.path)
             if let fileSize = fileAttributes![FileAttributeKey.size] {
               size += fileSize as! UInt64
             }
