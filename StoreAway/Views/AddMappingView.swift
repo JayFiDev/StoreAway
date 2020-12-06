@@ -12,7 +12,7 @@ struct AddMappingView: View {
   let input = InputHandler()
   
   @Environment(\.presentationMode) var mode
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   @State private var filetype: String = "type1, type2"
   @State private var path: URL = URL(fileURLWithPath: "Select Path")
   @State private var path_selected : Bool = false

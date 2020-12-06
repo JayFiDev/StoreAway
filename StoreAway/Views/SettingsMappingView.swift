@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsMappingView: View {
   
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   @State var selection = Set<Mapping>()
   @State var addMapping = false
   
@@ -57,6 +57,6 @@ struct SettingsMappingView: View {
 
 struct SettingMappingView_Previews: PreviewProvider {
   static var previews: some View {
-    SettingsMappingView().environmentObject(UserData())
+    SettingsMappingView().environmentObject(DataObject())
   }
 }

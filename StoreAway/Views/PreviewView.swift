@@ -8,10 +8,9 @@
 import SwiftUI
 
 
-
 struct PreviewView: View {
   
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   @Environment(\.presentationMode) var presentationMode
   @State private var selectedPreview: Previews?
   
@@ -35,7 +34,11 @@ struct PreviewView: View {
     }.padding(.all)
     .frame(width: 900, height: 500, alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/)
     .onAppear(perform: {
-      userData.updatePreviews()
+      userData.update()
+      if(userData.previews.count > 0){
+        selectedPreview = userData.previews.first
+      }
+      
     })
     
     
@@ -44,7 +47,7 @@ struct PreviewView: View {
 
 struct SidebarView: View {
   
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   let filehandler = FileHandler()
   @Binding var preview: Previews?
   
@@ -58,7 +61,7 @@ struct SidebarView: View {
 }
 
 struct DetailView: View {
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   let filehandler = FileHandler()
   
   @Binding var preview: Previews?
@@ -102,6 +105,6 @@ struct DetailView: View {
 
 struct PreviewView_Previews: PreviewProvider {
   static var previews: some View {
-    PreviewView().environmentObject(UserData())
+    PreviewView().environmentObject(DataObject())
   }
 }

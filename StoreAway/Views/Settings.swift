@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
   
 
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   let filehandler = FileHandler()
   let input = InputHandler()
   
@@ -45,6 +45,6 @@ struct SettingsView: View {
 
 struct Settings_Previews: PreviewProvider {
   static var previews: some View {
-    SettingsView().environmentObject(UserData())
+    SettingsView().environmentObject(DataObject())
   }
 }

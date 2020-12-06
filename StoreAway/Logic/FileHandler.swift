@@ -11,7 +11,7 @@ import SwiftUI
 class FileHandler {
   
   let fm = FileManager.default
-  
+ 
   
   func getFilesInFolder( path: URL, filetype: String) -> [File] {
     
@@ -35,14 +35,14 @@ class FileHandler {
     
   }
   
-  func action(data : UserData){
+  func action(mapping : [Mapping], folders: [URL], copyOrMove: Bool, keepFolderStructure: Bool ){
     
-    for folder in data.watchedFolders {
-      for map in data.mappingData {
+    for folder in folders {
+      for map in mapping {
         for n in map.name {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
-            actionFileToFolder(file: file, destination: map.path, copyOrMove: data.copyObjects, keepFolderStructure: data.keepFolderStructure)
+            actionFileToFolder(file: file, destination: map.path, copyOrMove: copyOrMove, keepFolderStructure: keepFolderStructure)
           }
         }
       }

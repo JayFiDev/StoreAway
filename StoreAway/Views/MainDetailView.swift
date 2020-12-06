@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainDetailView: View {
   
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   
   var body: some View {
     
@@ -29,6 +29,6 @@ struct MainDetailView: View {
 
 struct MainDetailView_Previews: PreviewProvider {
   static var previews: some View {
-    MainDetailView().environmentObject(UserData())
+    MainDetailView().environmentObject(DataObject())
   }
 }

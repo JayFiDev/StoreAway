@@ -11,7 +11,7 @@ struct SettingsWatchedFolderView: View {
   
   let filehandler = FileHandler()
   let input = InputHandler()
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   @State var selection = Set<URL>()
   
   var body: some View {
@@ -60,6 +60,6 @@ struct SettingsWatchedFolderView: View {
 
 struct InputView_Previews: PreviewProvider {
   static var previews: some View {
-    SettingsWatchedFolderView().environmentObject(UserData())
+    SettingsWatchedFolderView().environmentObject(DataObject())
   }
 }

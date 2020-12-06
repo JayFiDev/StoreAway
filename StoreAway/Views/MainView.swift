@@ -11,7 +11,8 @@ struct MainView: View {
   
   let filehandler = FileHandler()
   let input = InputHandler()
-  @EnvironmentObject var userData: UserData
+  
+  @EnvironmentObject var userData: DataObject
   @State private var showingAlert = false
   @State private var hovering = false
   @State private var isRunning = false
@@ -29,11 +30,11 @@ struct MainView: View {
       isRunning = true
       
       DispatchQueue.global().async {
-        filehandler.action(data: userData)
+        userData.action()
         
         DispatchQueue.main.async  {
           self.isRunning = false
-          self.userData.updateStats()
+          self.userData.update()
         }
       }
       
@@ -108,6 +109,6 @@ struct MainView: View {
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
-    MainView().environmentObject(UserData())
+    MainView().environmentObject(DataObject())
   }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsGeneralView: View {
   
-  @EnvironmentObject var userData: UserData
+  @EnvironmentObject var userData: DataObject
   
   var body: some View {
     VStack(alignment: .leading) {
@@ -51,6 +51,6 @@ struct SettingsGeneralView: View {
 
 struct SettingsGeneralView_Previews: PreviewProvider {
   static var previews: some View {
-    SettingsGeneralView().environmentObject(UserData())
+    SettingsGeneralView().environmentObject(DataObject())
   }
 }
