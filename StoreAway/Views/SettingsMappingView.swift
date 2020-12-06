@@ -18,7 +18,8 @@ struct SettingsMappingView: View {
     VStack {
       
       List(userData.mappingData, id: \.self, selection: $selection) { mapping in
-        MappingView(mapping: mapping)
+          MappingView(mapping: mapping)
+        
       }
       .frame(width: 400,
              height: self.userData.mappingData.count > 3 ? 320 : 15 + self.userData.mappingData.reduce(0) { i, _ in i + 80 },

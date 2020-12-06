@@ -16,10 +16,8 @@ class BookmarkHandler {
     bookmarks = getBookmarksFromUserData()
     
     for url in bookmarks.keys {
-      print(url.path)
       restoreFileAccess(with: bookmarks[url]!)
     }
-    
   }
   
   private func saveBookmarksToUserData(){
@@ -27,9 +25,7 @@ class BookmarkHandler {
     if let encoded = try? encoder.encode(bookmarks) {
       let defaults = UserDefaults.standard
       defaults.set(encoded, forKey: "Bookmarks")
-       
     }
-    
   }
   
   private func getBookmarksFromUserData() -> [URL : Data] {
@@ -40,7 +36,6 @@ class BookmarkHandler {
       }
     }
     return [:]
-    
   }
   
   public func saveBookmarkData(for path: URL) {
@@ -57,11 +52,9 @@ class BookmarkHandler {
   public func removeBookmarkData(for path: URL) {
         bookmarks[path] = nil
         saveBookmarksToUserData()
-
   }
   
   private func restoreFileAccess(with bookmarkData: Data){
-          
         do {
               var isStale = false
               let url = try URL(resolvingBookmarkData: bookmarkData, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
@@ -70,7 +63,6 @@ class BookmarkHandler {
                   print("Bookmark is stale, need to save a new one... ")
                   saveBookmarkData(for: url)
               }
-
           } catch {
               print("Error resolving bookmark:", error)
           }

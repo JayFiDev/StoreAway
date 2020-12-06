@@ -14,6 +14,9 @@ class DataHandler : ObservableObject {
   let bookmarkHandler = BookmarkHandler()
   let userDataHandler = UserDataHandler()
   
+  @Published var previews : [Previews] = []
+  @Published var statistics : [Stats] = []
+  
   @Published var watchedFolders : [URL] = []{
     didSet {
       update()
@@ -25,10 +28,6 @@ class DataHandler : ObservableObject {
       update()
     }
   }
-  
-  @Published var previews : [Previews] = []
-  
-  @Published var statistics : [Stats] = []
   
   @Published var options : Options {
     didSet {
@@ -44,7 +43,6 @@ class DataHandler : ObservableObject {
     enableFileAccess()
     statistics = fileHandler.getStats(folders: watchedFolders, mappings: mappingData)
     disableFileAccess()
-    
   }
   
   func addMapping(name: [String], path: URL)

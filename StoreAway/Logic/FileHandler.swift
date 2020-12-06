@@ -12,6 +12,8 @@ class FileHandler {
   
   let fm = FileManager.default
  
+  var alwaysUseOption : NSApplication.ModalResponse = .alertThirdButtonReturn
+  var dialogAnswered : Bool = false
   
   func getFilesInFolder( path: URL, filetype: String) -> [File] {
     
@@ -47,6 +49,7 @@ class FileHandler {
         }
       }
     }
+    dialogAnswered = false
   }
   
   func actionFileToFolder(file: File, destination: URL, options: Options){
@@ -65,15 +68,28 @@ class FileHandler {
       }
     }
     
+    
     if fm.fileExists(atPath: destination_path.path)
     {
       var answer : NSApplication.ModalResponse = .alertThirdButtonReturn
       
-      DispatchQueue.main.sync { //call dialog from main thread -> exception when called from background thread
-        answer = dialog(question: filename + " exists at " + (destination_path.deletingLastPathComponent()).path + "/", text: "Replace File?")
+      let question : String = options.askEveryFile
+                                      ? filename + " exists at " + (destination_path.deletingLastPathComponent()).path + "/"
+                                      : "File(s) exist at " + (destination_path.deletingLastPathComponent()).path + "/"
+      
+      let text : String = options.askEveryFile ? "Replace file?" : "Replace all files?"
+      
+      if !dialogAnswered {
+        DispatchQueue.main.sync { //call dialog from main thread -> exception when called from background thread
+          answer = dialog(question: question, text: text)
+        }
+        if !options.askEveryFile {
+          dialogAnswered = true
+          alwaysUseOption = answer
+        }
       }
       
-      switch answer {
+      switch options.askEveryFile ? answer : alwaysUseOption {
         case .alertFirstButtonReturn:
           try? fm.removeItem(atPath: destination_path.path)
           
@@ -84,7 +100,7 @@ class FileHandler {
             let ext = file.path.pathExtension
             let temp = file.path.deletingPathExtension().lastPathComponent
             filename = temp + " " + String(counter) + "." + ext
-            destination_path = (destination.appendingPathComponent(filename))
+            destination_path = destination_path.deletingLastPathComponent().appendingPathComponent(filename)
           }while(fm.fileExists(atPath: destination_path.path))
           
         case .alertThirdButtonReturn:

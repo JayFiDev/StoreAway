@@ -22,7 +22,7 @@ struct SettingsWatchedFolderView: View {
       }.frame(width: 400,
               height: self.userData.watchedFolders.count > 5 ? 150 : 10 + self.userData.watchedFolders.reduce(0) { i, _ in i + 30 },
               alignment: .center)
-      
+            
       
       HStack {
         Button(action: {

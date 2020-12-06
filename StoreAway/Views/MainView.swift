@@ -44,6 +44,10 @@ struct MainView: View {
     }
   }
   
+  fileprivate func showEmptyMappingAlert() -> Alert {
+    return Alert(title: Text("Nothing to do"), message: Text("Please add watched folders and mappings in Preferences"), dismissButton: .default(Text("Ok")))
+  }
+  
   var body: some View {
     
     
@@ -54,9 +58,6 @@ struct MainView: View {
           Circle()
             .foregroundColor(hovering ? .accentColor : .gray)
             .frame(width: 200, height: 200)
-            .alert(isPresented: $showingAlert) {
-              Alert(title: Text("Nothing to do"), message: Text("Please add watched folders and mappings in Preferences"), dismissButton: .default(Text("Ok")))
-            }
           
           if isRunning{
             ProgressView()
@@ -101,7 +102,10 @@ struct MainView: View {
         
       }
       
-    }.frame(width: userData.options.detailViewEnabled ? 700 : 300, height: 350, alignment: .center)
+    }.frame(width: userData.options.detailViewEnabled ? 600 : 300, height: 350, alignment: .center)
+    .alert(isPresented: $showingAlert) {
+      showEmptyMappingAlert()
+    }
     
     
   }
