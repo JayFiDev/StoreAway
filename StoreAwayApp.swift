@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct StoreAwayApp: App {
   
-    var userData = DataObject()
+    var userData = DataHandler()
     
     
     var body: some Scene {

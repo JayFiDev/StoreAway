@@ -10,7 +10,7 @@ import SwiftUI
 
 struct PreviewView: View {
   
-  @EnvironmentObject var userData: DataObject
+  @EnvironmentObject var userData: DataHandler
   @Environment(\.presentationMode) var presentationMode
   @State private var selectedPreview: Previews?
   
@@ -47,7 +47,7 @@ struct PreviewView: View {
 
 struct SidebarView: View {
   
-  @EnvironmentObject var userData: DataObject
+  @EnvironmentObject var userData: DataHandler
   let filehandler = FileHandler()
   @Binding var preview: Previews?
   
@@ -61,7 +61,7 @@ struct SidebarView: View {
 }
 
 struct DetailView: View {
-  @EnvironmentObject var userData: DataObject
+  @EnvironmentObject var userData: DataHandler
   let filehandler = FileHandler()
   
   @Binding var preview: Previews?
@@ -105,6 +105,6 @@ struct DetailView: View {
 
 struct PreviewView_Previews: PreviewProvider {
   static var previews: some View {
-    PreviewView().environmentObject(DataObject())
+    PreviewView().environmentObject(DataHandler())
   }
 }

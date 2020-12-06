@@ -9,34 +9,34 @@ import SwiftUI
 
 struct SettingsGeneralView: View {
   
-  @EnvironmentObject var userData: DataObject
+  @EnvironmentObject var userData: DataHandler
   
   var body: some View {
     VStack(alignment: .leading) {
       
       HStack {
-        Toggle(isOn: $userData.copyObjects) {
+        Toggle(isOn: $userData.options.copyObjects) {
           Text("Copy instead of move")
         }
         Spacer()
       }
       
       HStack {
-        Toggle(isOn: $userData.askEveryFile) {
+        Toggle(isOn: $userData.options.askEveryFile) {
           Text("Ask for every file")
         }
         Spacer()
       }
       
       HStack {
-        Toggle(isOn: $userData.detailViewEnabled) {
+        Toggle(isOn: $userData.options.detailViewEnabled) {
           Text("Show details")
         }
         Spacer()
       }
       
       HStack {
-        Toggle(isOn: $userData.keepFolderStructure) {
+        Toggle(isOn: $userData.options.keepFolderStructure) {
           Text("Keep folder structure")
         }
         Spacer()
@@ -51,6 +51,6 @@ struct SettingsGeneralView: View {
 
 struct SettingsGeneralView_Previews: PreviewProvider {
   static var previews: some View {
-    SettingsGeneralView().environmentObject(DataObject())
+    SettingsGeneralView().environmentObject(DataHandler())
   }
 }

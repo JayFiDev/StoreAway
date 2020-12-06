@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 
-class DataObject : ObservableObject {
+class DataHandler : ObservableObject {
   
   let fileHandler = FileHandler()
   let bookmarkHandler = BookmarkHandler()
@@ -30,47 +30,21 @@ class DataObject : ObservableObject {
   
   @Published var statistics : [Stats] = []
   
-  
-  @Published var detailViewEnabled : Bool = false {
+  @Published var options : Options {
     didSet {
-      userDataHandler.setBoolValue(for: "DetailView", value: detailViewEnabled)
-    }
-  }
-  
-  @Published var copyObjects : Bool = false{
-    didSet {
-      userDataHandler.setBoolValue(for: "CopyOnly", value: copyObjects)
-    }
-  }
-  
-  @Published var askEveryFile : Bool = false{
-    didSet {
-      userDataHandler.setBoolValue(for: "AskEveryFileDialog", value: askEveryFile)
-    }
-  }
-  
-  @Published var keepFolderStructure : Bool = false{
-    didSet {
-      userDataHandler.setBoolValue(for: "keepFolderStructure", value: keepFolderStructure)
+      userDataHandler.saveOptions(options: options)
     }
   }
   
   init(){
     watchedFolders = userDataHandler.loadURL()
     mappingData = userDataHandler.loadMapping()
-    readSettings()
+    options = userDataHandler.loadOptions()
     
     enableFileAccess()
     statistics = fileHandler.getStats(folders: watchedFolders, mappings: mappingData)
     disableFileAccess()
     
-  }
-  
-  func readSettings(){
-    detailViewEnabled = UserDefaults.standard.bool(forKey: "DetailView")
-    copyObjects = UserDefaults.standard.bool(forKey: "CopyOnly" )
-    askEveryFile = UserDefaults.standard.bool(forKey: "AskEveryFileDialog")
-    keepFolderStructure = UserDefaults.standard.bool(forKey: "keepFolderStructure")
   }
   
   func addMapping(name: [String], path: URL)
@@ -98,11 +72,6 @@ class DataObject : ObservableObject {
     watchedFolders.remove(at: index)
     userDataHandler.saveWatchedFoldersToUserData(current: self.watchedFolders)
   }
-
-  
-}
-
-extension DataObject {
   
   public func enableFileAccess() {
     bookmarkHandler.enableFileAccess()
@@ -122,8 +91,7 @@ extension DataObject {
   func action(){
     bookmarkHandler.enableFileAccess()
     
-    fileHandler.action(mapping : mappingData, folders: watchedFolders,
-              copyOrMove: copyObjects, keepFolderStructure: keepFolderStructure )
+    fileHandler.action(mapping : mappingData, folders: watchedFolders, options: options )
     
     bookmarkHandler.disableFileAccess()
   }

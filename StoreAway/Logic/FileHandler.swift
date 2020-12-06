@@ -35,27 +35,27 @@ class FileHandler {
     
   }
   
-  func action(mapping : [Mapping], folders: [URL], copyOrMove: Bool, keepFolderStructure: Bool ){
+  func action(mapping : [Mapping], folders: [URL], options: Options){
     
     for folder in folders {
       for map in mapping {
         for n in map.name {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
-            actionFileToFolder(file: file, destination: map.path, copyOrMove: copyOrMove, keepFolderStructure: keepFolderStructure)
+            actionFileToFolder(file: file, destination: map.path, options: options)
           }
         }
       }
     }
   }
   
-  func actionFileToFolder(file: File, destination: URL, copyOrMove: Bool, keepFolderStructure: Bool){
+  func actionFileToFolder(file: File, destination: URL, options: Options){
     
     var filename = file.path.lastPathComponent
     var destination_path = (destination.appendingPathComponent(filename))
     
     
-    if(keepFolderStructure) //keep sub-folder structure
+    if(options.keepFolderStructure) //keep sub-folder structure
     {
       destination_path = destination.appendingPathComponent(file.relativePath)
       
@@ -96,7 +96,7 @@ class FileHandler {
       
     }
     do{
-      if copyOrMove {
+      if options.copyObjects {
         try fm.copyItem(atPath: file.path.path, toPath: destination_path.path)
       } else {
         try fm.moveItem(atPath: file.path.path, toPath: destination_path.path)

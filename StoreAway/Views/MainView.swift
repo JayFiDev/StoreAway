@@ -12,7 +12,7 @@ struct MainView: View {
   let filehandler = FileHandler()
   let input = InputHandler()
   
-  @EnvironmentObject var userData: DataObject
+  @EnvironmentObject var userData: DataHandler
   @State private var showingAlert = false
   @State private var hovering = false
   @State private var isRunning = false
@@ -94,14 +94,14 @@ struct MainView: View {
         .padding(.horizontal)
         
       }
-      if userData.detailViewEnabled{
+      if userData.options.detailViewEnabled{
         
         MainDetailView()
           .padding(.leading)
         
       }
       
-    }.frame(width: userData.detailViewEnabled ? 700 : 300, height: 350, alignment: .center)
+    }.frame(width: userData.options.detailViewEnabled ? 700 : 300, height: 350, alignment: .center)
     
     
   }
@@ -109,6 +109,6 @@ struct MainView: View {
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
-    MainView().environmentObject(DataObject())
+    MainView().environmentObject(DataHandler())
   }
 }
