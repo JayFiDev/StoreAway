@@ -56,6 +56,9 @@ struct MainView: View {
       VStack{
         ZStack{
           Circle()
+            .foregroundColor(.primary)
+            .frame(width: 205, height: 205)
+          Circle()
             .foregroundColor(hovering ? .accentColor : .gray)
             .frame(width: 200, height: 200)
           
@@ -76,14 +79,19 @@ struct MainView: View {
         }
         .padding(.horizontal)
         
+        
+        
         ZStack{
+          Circle()
+            .foregroundColor(.primary)
+            .frame(width: 85, height: 85)
           Circle()
             .foregroundColor(hoveringPreview ? .accentColor : .gray)
             .frame(width: 80, height: 80)
             .sheet(isPresented: $showPreview) {
               PreviewView()
             }
-          Text("Preview").font(.title2)
+          Text("Preview...").font(.title2)
         }
         .contentShape(Circle())
         .onHover(perform: { h in

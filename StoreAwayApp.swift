@@ -41,21 +41,8 @@ struct StoreAwayApp: App {
         Settings {
           SettingsView()
             .environmentObject(userData)
-        }
-        
-      //shared.open(URL(string: "https://github.com/JayFiDev/StoreAway")!)
-      
+        }      
         
     }
 }
 
-//class AppDelegate: NSObject, NSApplicationDelegate {
-//    @IBOutlet var window: NSWindow!
-//    func applicationDidFinishLaunching(_ aNotification: Notification) {
-//
-//    }
-//    func applicationWillTerminate(_ aNotification: Notification) {
-//    }
-//
-//
-//}
