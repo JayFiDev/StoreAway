@@ -1,7 +1,7 @@
 # StoreAway
 This application allows you to automatically move/copy files by filename extension to different destinations. Select the extension and destination you want, specify which folders should be searched for these files and you are good to go.
 
-* Look at your download folder. Lots of different files from multiple sources for multiple projects. Store them at the right place. 
+* Look at your download folder. Lots of different files from multiple sources for multiple projects. Move or copy them to the right place. 
 * Move your 3d printing files from the desktop to a combined folder. 
 * Backup your word or excel documents or move them to a different location.
 
