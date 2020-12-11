@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Stats : Hashable {
-  var filetypes : [String]
+struct Stats: Hashable {
+  var filetypes: [String]
   var numberOfFiles: Int
-  var size : UInt64
-  var sizeString : String
+  var size: UInt64
+  var sizeString: String
 }

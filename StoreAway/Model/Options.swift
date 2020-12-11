@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Options : Hashable {
-  var detailViewEnabled : Bool
-  var copyObjects : Bool
-  var askEveryFile : Bool
-  var keepFolderStructure : Bool
+struct Options: Hashable {
+  var detailViewEnabled: Bool
+  var copyObjects: Bool
+  var askEveryFile: Bool
+  var keepFolderStructure: Bool
 }

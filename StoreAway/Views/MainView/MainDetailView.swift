@@ -8,21 +8,20 @@
 import SwiftUI
 
 struct MainDetailView: View {
-  
+
   @EnvironmentObject var userData: DataHandler
-  
+
   var body: some View {
-    
+
     VStack(alignment: .trailing) {
-      
-      List(userData.statistics, id: \.self) { s in
+
+      List(userData.statistics, id: \.self) { stats in
         HStack {
           Spacer()
-          DetailStatisticView(stats: s)
+          DetailStatisticView(stats: stats)
         }
       }
 
-      
     }.frame(width: 300, height: 300, alignment: .center)
   }
 }

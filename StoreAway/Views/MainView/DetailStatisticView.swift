@@ -8,25 +8,25 @@
 import SwiftUI
 
 struct DetailStatisticView: View {
-    
-  let stats : Stats
-  
+
+  let stats: Stats
+
   var body: some View {
-      HStack{
-        
-        ZStack{
+      HStack {
+
+        ZStack {
           Circle().foregroundColor(.accentColor)
           Text(stats.filetypes.joined(separator: ", ")).multilineTextAlignment(.center)
-          
+
         }.frame(width: 60, height: 60, alignment: .center)
-        
+
         Text("\(stats.numberOfFiles) Files").font(.title3)
           .padding(.leading)
-        
+
         Spacer()
         Text("\(stats.sizeString)").font(.title3)
           .padding(.trailing)
-        
+
       }.frame(width: 250, height: 65)
     }
 }
