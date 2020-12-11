@@ -10,9 +10,7 @@ import SwiftUI
 @main
 struct StoreAwayApp: App {
   
-    //@NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var userData = DataHandler()
-    
     
     var body: some Scene {
         WindowGroup {
@@ -41,7 +39,7 @@ struct StoreAwayApp: App {
         Settings {
           SettingsView()
             .environmentObject(userData)
-        }      
+        }
         
     }
 }

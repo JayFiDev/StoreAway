@@ -53,7 +53,7 @@ struct SidebarView: View {
   
   var body: some View {
     List(userData.previews, id: \.self, selection: $preview) { preview in
-      Text("\(preview.map.name.joined(separator: ", "))")
+      Text("\(preview.map.filetypes.joined(separator: ", "))")
     }
     .listStyle(SidebarListStyle())
     .frame(width: 200)
@@ -78,21 +78,19 @@ struct DetailView: View {
             
             //only display section if file are found
             if folder.files.count > 0 {
-            Section(header: Text("Folder: \(folder.path.path)"))
-            {
-              ForEach(folder.files, id: \.self) { file in
-                VStack {
-                  //Text("Current: ~/\(file.relativePath) \tNew:\(preview!.map.path.path)/\(file.relativePath)")
-                  Text("~/\(file.relativePath)")
-                }.frame(width: 500, height: 20, alignment: .leading)
-                
+              Section(header: Text("Folder: \(folder.path.path)"))
+              {
+                ForEach(folder.files, id: \.self) { file in
+                  VStack {
+                    //Text("Current: ~/\(file.relativePath) \tNew:\(preview!.map.path.path)/\(file.relativePath)")
+                    Text("~/\(file.relativePath)")
+                  }.frame(width: 500, height: 20, alignment: .leading)
+                }
               }
             }
-            }
-            
           }
         }
-
+        
       } else{
         Text("No mapping selected")
       }

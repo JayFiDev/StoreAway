@@ -10,8 +10,9 @@ import Foundation
 struct Mapping: Hashable, Codable, Identifiable {
   
   var id : UUID
-  var name : [String]
+  var filetypes : [String]
   var path : URL
+  var isCustom: Bool = false
   
 }
 

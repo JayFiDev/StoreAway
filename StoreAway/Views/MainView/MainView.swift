@@ -13,12 +13,14 @@ struct MainView: View {
   let input = InputHandler()
   
   @EnvironmentObject var userData: DataHandler
+  
   @State private var showingAlert = false
   @State private var hovering = false
   @State private var isRunning = false
   
   @State private var hoveringPreview = false
   @State private var showPreview = false
+  @State private var dragOver = false
   
   fileprivate func onTappedCircle() {
     if isRunning {
@@ -66,7 +68,7 @@ struct MainView: View {
             ProgressView()
               .scaleEffect(1.25, anchor: .center)
           }else{
-            Text("Store away").font(.title)
+            Text(!dragOver ? "Store away" : "Copy to folders" ).font(.title)
           }
           
         }
@@ -111,10 +113,21 @@ struct MainView: View {
       }
       
     }.frame(width: userData.options.detailViewEnabled ? 600 : 300, height: 350, alignment: .center)
+    
     .alert(isPresented: $showingAlert) {
       showEmptyMappingAlert()
     }
-    
+    .onDrop(of: ["public.file-url"], isTargeted: $dragOver) {providers -> Bool in
+      
+      for provider in providers {
+        provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, error) in
+          if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
+            print(url.path)
+          }
+        })
+      }
+      return true
+    }
     
   }
 }

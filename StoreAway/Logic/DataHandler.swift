@@ -47,9 +47,34 @@ class DataHandler : ObservableObject {
   
   func addMapping(name: [String], path: URL)
   {
-    mappingData.append(Mapping(id: UUID(), name: name, path: path))
+    mappingData.append(Mapping(id: UUID(), filetypes: name, path: path))
     bookmarkHandler.saveBookmarkData(for: path)
     userDataHandler.saveMappingToUserData(current: mappingData)
+  }
+  
+  func updateMapping(id: UUID, replaceWith: Mapping)
+  {
+    
+    if let index = mappingData.firstIndex(where: {$0.id == id}){
+      
+      bookmarkHandler.removeBookmarkData(for: mappingData[index].path)
+      
+      if mappingData[index].path != replaceWith.path {
+        bookmarkHandler.saveBookmarkData(for: replaceWith.path)
+      }
+      mappingData[index] = replaceWith
+      userDataHandler.saveMappingToUserData(current: mappingData)
+      
+    }
+     
+  }
+  
+  func removeMapping(id: UUID ){
+    
+    if let index = mappingData.firstIndex(where: {$0.id == id})
+    {
+      removeMapping(index: index)      
+    }
   }
   
   func removeMapping(index: Int){

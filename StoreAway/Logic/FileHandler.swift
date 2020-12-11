@@ -41,7 +41,7 @@ class FileHandler {
     
     for folder in folders {
       for map in mapping {
-        for n in map.name {
+        for n in map.filetypes {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
             actionFileToFolder(file: file, destination: map.path, options: options)
@@ -151,7 +151,7 @@ extension FileHandler{
       
       for folder in folders {
         
-        for n in map.name {
+        for n in map.filetypes {
           let files = getFilesInFolder(path: folder, filetype: n)
           folderList.append(Folder(path: folder, files: files))
         }
@@ -176,7 +176,7 @@ extension FileHandler {
       counter = 0
       size = 0
       for folder in folders{
-        for n in map.name {
+        for n in map.filetypes {
           let files = getFilesInFolder(path: folder, filetype: n)
           for file in files {
             counter += 1
@@ -188,7 +188,7 @@ extension FileHandler {
         }
       }
       
-      stats.append(Stats(filetypes: map.name, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
+      stats.append(Stats(filetypes: map.filetypes, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
     }
     
     return stats
@@ -205,5 +205,16 @@ extension FileHandler {
     }
     return String(format: "%4.1f %@", value, tokens[factor])
   }
+  
+}
+
+extension FileHandler {
+  
+  //https://developer.apple.com/library/archive/documentation/Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html#//apple_ref/doc/uid/TP40009259-SW1
+  func getUTI(path: URL)
+  {
+    
+  }
+  
   
 }

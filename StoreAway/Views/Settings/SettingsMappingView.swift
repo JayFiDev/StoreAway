@@ -10,9 +10,10 @@ import SwiftUI
 struct SettingsMappingView: View {
   
   @EnvironmentObject var userData: DataHandler
-  @State var selection = Set<Mapping>()
-  @State var addMapping = false
-  
+  @State var selection : Mapping?
+
+  @State var showAddSheet = false
+  @State var showChangeSheet = false
   
   var body: some View {
     VStack {
@@ -22,34 +23,31 @@ struct SettingsMappingView: View {
         
       }
       .frame(width: 400,
-             height: self.userData.mappingData.count > 3 ? 320 : 15 + self.userData.mappingData.reduce(0) { i, _ in i + 80 },
-             alignment: .center)
-      
+             height: self.userData.mappingData.count > 3 ? 320 : 15 + self.userData.mappingData.reduce(0)
+              { i, _ in i + 80 }, alignment: .center)
+      .onChange(of: selection) { changed in
+          showChangeSheet = true
+
+      }.sheet(isPresented: $showChangeSheet)
+      {
+          AddChangeMappingView(mapping: selection!, addNew: false )
+      }
       
       HStack {
         
         Button(action: {
-          addMapping = true
+          showAddSheet = true
         }, label: {
           Text("+")
         })
         
-        Button(action: {
-          if selection.count == 0 { return }
-          if let index = self.userData.mappingData.firstIndex(of: selection.first!) //todo do for every selected item
-          {
-            userData.removeMapping(index: index)
-            selection = Set<Mapping>()
-          }
-          
-        }, label: {
-          Text("-")
-        })
-        Spacer()
+       Spacer()
         
       }.padding([.leading, .bottom])
-      .sheet(isPresented: $addMapping) {
-        AddMappingView()
+      
+      .sheet(isPresented: $showAddSheet)
+      {
+          AddChangeMappingView(mapping: Mapping(id: UUID(), filetypes: ["type"], path: URL(fileURLWithPath: "")), addNew: true )
       }
       
     }.frame(width: 400)
