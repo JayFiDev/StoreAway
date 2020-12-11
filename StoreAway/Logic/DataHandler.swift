@@ -54,9 +54,8 @@ class DataHandler: ObservableObject {
 
     if let index = mappingData.firstIndex(where: {$0.id == id}) {
 
-      bookmarkHandler.removeBookmarkData(for: mappingData[index].path)
-
       if mappingData[index].path != replaceWith.path {
+        bookmarkHandler.removeBookmarkData(for: mappingData[index].path)
         bookmarkHandler.saveBookmarkData(for: replaceWith.path)
       }
       mappingData[index] = replaceWith

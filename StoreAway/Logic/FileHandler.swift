@@ -25,8 +25,6 @@ class FileHandler {
                                             })!
 
     for case let item as URL in enumerator {
-      //let resourceValues = try item.resourceValues(forKeys: Set(resourceKeys))
-      print(item.path)
       if filetypes.contains(item.pathExtension.lowercased()) {
         let filename = item.deletingPathExtension().lastPathComponent
         let filetype = item.pathExtension
