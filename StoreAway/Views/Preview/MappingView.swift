@@ -17,7 +17,14 @@ struct MappingView: View {
 
       ZStack {
         Circle().foregroundColor(.accentColor)
-        Text(mapping.filetypes.joined(separator: ", ")).multilineTextAlignment(.center)
+        if mapping.isCustom {
+          Text(mapping.fileExtensions!.joined(separator: ", ")).multilineTextAlignment(.center)
+        } else {
+          VStack {
+            Image(systemName: mapping.fileType!.symbol).font(Font.system(.title2))
+            Text(mapping.fileType!.displayString).multilineTextAlignment(.center)
+          }
+        }
 
       }.frame(width: 60, height: 60, alignment: .center)
 
@@ -30,7 +37,6 @@ struct MappingView: View {
 
 struct MappingView_Previews: PreviewProvider {
   static var previews: some View {
-    MappingView(mapping: Mapping(id: UUID(), filetypes: ["gcode", "svg"],
-                                 path: URL(fileURLWithPath: "/Users/juergen/Nextcloud/Making/3D Druck/3D Bibliothek/")))
+    MappingView(mapping: Mapping(path: URL(fileURLWithPath: "/Users/juergen/Nextcloud/Making/3D Druck/3D Bibliothek/"), fileExtensions: ["gcode", "svg"]))
   }
 }

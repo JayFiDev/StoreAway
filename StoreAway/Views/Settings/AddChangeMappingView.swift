@@ -10,20 +10,23 @@ import SwiftUI
 struct AddChangeMappingView: View {
 
   let input = InputHandler()
+  let types: [Type] = DefinedTypes.types
 
-  @EnvironmentObject var userData: DataHandler
+  @EnvironmentObject var data: DataHandler
   @Environment(\.presentationMode) var mode
   var mapping: Mapping
   var addNew: Bool = false
 
   @State var pathDisplay: String = ""
   @State var path: URL
-  @State var filetype: String = "type1, type2"
+  @State var filetype: String = ""
+  @State var isCustom: Bool = false
+  @State var typeChoice: Int = 0
 
   init(mapping: Mapping, addNew: Bool) {
     self.mapping = mapping
-    self._filetype = State(wrappedValue: mapping.filetypes.joined(separator: ", "))
-    self._path = State(wrappedValue: mapping.path) // _editedValue is State<String>
+    self._path = State(wrappedValue: mapping.path)
+    self.addNew = addNew
 
     if !addNew {
       self._pathDisplay = State(wrappedValue: mapping.path.path)
@@ -31,7 +34,46 @@ struct AddChangeMappingView: View {
       self.pathDisplay = ""
     }
 
-    self.addNew = addNew
+    if !addNew {
+
+      if isCustom {
+        self._filetype = State(wrappedValue: mapping.fileExtensions!.joined(separator: ", "))
+
+      } else {
+
+        if let type = mapping.fileType {
+          if let index = types.firstIndex(of: type) {
+            _typeChoice = State(initialValue: index)
+          }
+        }
+
+      }
+    } else {
+      _typeChoice = State(initialValue: 0)
+
+    }
+
+  }
+
+  fileprivate func createOrUpdateMapping() {
+    let temp = filetype.replacingOccurrences(of: " ", with: "")
+    let filetypes: [String] = temp.components(separatedBy: ",")
+
+    if !addNew {
+
+      if isCustom {
+        data.updateMapping(id: mapping.id, replaceWith: Mapping(id: mapping.id, path: path, fileExtensions: filetypes))
+      } else {
+        data.updateMapping(id: mapping.id, replaceWith: Mapping(id: mapping.id, path: path, fileType: types[typeChoice]))
+      }
+
+    } else {
+      if isCustom {
+        data.addMapping(path: path, fileExtensions: filetypes)
+      } else {
+        data.addMapping(path: path, fileType: types[typeChoice])
+      }
+    }
   }
 
   var body: some View {
@@ -40,13 +82,28 @@ struct AddChangeMappingView: View {
 
       Group {
         Label(
-          title: { Text("Filetype(s) [seperate by ,]") },
+          title: { Text("Filetype") },
           icon: { Image(systemName: "doc.text.magnifyingglass") }
         )
 
-        TextField("Filetype", text: $filetype).frame(width: 250, height: 20, alignment: .leading)
-        Divider().padding(.vertical, 2.0)
+        HStack {
+          Picker("", selection: $typeChoice) {
+            ForEach(0 ..< types.count) { index in
+              Text(self.types[index].displayString)
+                .tag(index)
+            }
+          }
+          .padding(.leading, -7.0)
+          Toggle("custom", isOn: $isCustom)
+        }
+
+        if isCustom {
+          TextField("Filetype(s) [seperate by ,]", text: $filetype).frame(width: 250, height: 20, alignment: .leading)
+        }
+
       }
+
+      Divider().padding(.vertical, 2.0)
 
       Group {
         Label(
@@ -76,14 +133,7 @@ struct AddChangeMappingView: View {
       HStack {
         Button(action: {
 
-          let temp = filetype.replacingOccurrences(of: " ", with: "")
-          let filetypes: [String] = temp.components(separatedBy: ",")
-
-          if !addNew {
-            userData.updateMapping(id: mapping.id, replaceWith: Mapping(id: mapping.id, filetypes: filetypes, path: path, isCustom: false))
-          } else {
-            userData.addMapping(name: filetypes, path: path)
-          }
+          createOrUpdateMapping()
 
           self.mode.wrappedValue.dismiss()
 
@@ -96,23 +146,25 @@ struct AddChangeMappingView: View {
         }, label: {
           Text("Cancel")
         })
+
         Spacer()
+
         Button(action: {
-          userData.removeMapping(id: mapping.id)
+          data.removeMapping(id: mapping.id)
           self.mode.wrappedValue.dismiss()
         }, label: {
           Text("Delete").foregroundColor(.red)
         }).disabled(addNew)
       }
 
-    }.padding(.all).frame(width: 300, height: 230, alignment: .topLeading)
+    }.padding(.all).frame(width: 320, height: 350, alignment: .topLeading)
 
   }
 }
 
 struct AddChangeMappingView_Previews: PreviewProvider {
   static var previews: some View {
-    AddChangeMappingView(mapping: Mapping(id: UUID(), filetypes: ["String"],
-                                          path: URL(fileURLWithPath: "/this/is/a/test")), addNew: false).environmentObject(DataHandler())
+    AddChangeMappingView(mapping: Mapping(path: URL(fileURLWithPath: "/this/is/a/test"),
+                                          fileExtensions: ["String"]), addNew: false).environmentObject(DataHandler())
   }
 }

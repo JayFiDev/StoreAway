@@ -8,7 +8,11 @@
 import Foundation
 
 struct Stats: Hashable {
-  var filetypes: [String]
+
+  var fileExtensions: [String]?
+  var fileType: Type?
+  var isCustom: Bool
+
   var numberOfFiles: Int
   var size: UInt64
   var sizeString: String

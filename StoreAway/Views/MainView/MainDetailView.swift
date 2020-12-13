@@ -15,10 +15,10 @@ struct MainDetailView: View {
 
     VStack(alignment: .trailing) {
 
-      List(userData.statistics, id: \.self) { stats in
+      List(userData.statistics, id: \.self) { stat in
         HStack {
           Spacer()
-          DetailStatisticView(stats: stats)
+          DetailStatisticView(statistic: stat)
         }
       }
 

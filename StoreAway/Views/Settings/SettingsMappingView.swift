@@ -44,7 +44,7 @@ struct SettingsMappingView: View {
       }.padding([.leading, .bottom])
 
       .sheet(isPresented: $showAddSheet) {
-          AddChangeMappingView(mapping: Mapping(id: UUID(), filetypes: ["type"], path: URL(fileURLWithPath: "")), addNew: true )
+          AddChangeMappingView(mapping: Mapping(path: URL(fileURLWithPath: ""), fileExtensions: ["type"]), addNew: true )
       }
 
     }.frame(width: 400)

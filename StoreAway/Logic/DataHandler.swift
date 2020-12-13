@@ -5,6 +5,7 @@
 //  Created by JayFi on 14.11.20.
 //
 import Foundation
+import UniformTypeIdentifiers
 import SwiftUI
 
 class DataHandler: ObservableObject {
@@ -44,8 +45,14 @@ class DataHandler: ObservableObject {
     disableFileAccess()
   }
 
-  func addMapping(name: [String], path: URL) {
-    mappingData.append(Mapping(id: UUID(), filetypes: name, path: path))
+  func addMapping(path: URL, fileExtensions: [String]) {
+    mappingData.append(Mapping(path: path, fileExtensions: fileExtensions))
+    bookmarkHandler.saveBookmarkData(for: path)
+    userDataHandler.saveMappingToUserData(current: mappingData)
+  }
+
+  func addMapping(path: URL, fileType: Type) {
+    mappingData.append(Mapping(path: path, fileType: fileType))
     bookmarkHandler.saveBookmarkData(for: path)
     userDataHandler.saveMappingToUserData(current: mappingData)
   }

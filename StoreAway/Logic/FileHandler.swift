@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UniformTypeIdentifiers
 
 class FileHandler {
 
@@ -14,14 +15,56 @@ class FileHandler {
   var alwaysUseOption: NSApplication.ModalResponse = .alertThirdButtonReturn
   var dialogAnswered: Bool = false
 
+  func checkTyping(types: [UTType], supertype: UTType) -> Bool {
+    for type in types {
+      if type.conforms(to: supertype) {
+        return true
+      }
+    }
+    return false
+  }
+
+  func getFilesInFolderByUTType(path: URL, filetype: UTType) -> [File] {
+
+    var files: [File] = []
+
+    let resourceKeys: [URLResourceKey] = [.nameKey, .typeIdentifierKey]
+    let enumerator = filemanager.enumerator(at: path, includingPropertiesForKeys: resourceKeys,
+                                            options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
+                                              print("directoryEnumerator error at \(url): ", error)
+                                              return true
+
+                                            })!
+
+    for case let item as URL in enumerator {
+
+      //only get public filetypes for now
+      let types = UTType.types(tag: item.pathExtension, tagClass: .filenameExtension, conformingTo: nil).filter { type in
+        return type.isPublic
+      }
+
+      if checkTyping(types: types, supertype: filetype) {
+        let filename = item.deletingPathExtension().lastPathComponent
+        let fileExtension = item.pathExtension
+        let relativePath = item.relativePath(from: path)
+
+        files.append(File(path: item, relativePath: relativePath != nil ? relativePath! : "", filename: filename, filetype: fileExtension))
+      }
+
+    }
+
+    return files
+  }
+
   func getFilesInFolder(path: URL, filetypes: [String]) -> [File] {
     var files: [File] = []
 
-    let resourceKeys: [URLResourceKey] = [.nameKey]
+    let resourceKeys: [URLResourceKey] = [.nameKey, .typeIdentifierKey]
     let enumerator = filemanager.enumerator(at: path, includingPropertiesForKeys: resourceKeys,
                                             options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
-                                                print("directoryEnumerator error at \(url): ", error)
+                                              print("directoryEnumerator error at \(url): ", error)
                                               return true
+
                                             })!
 
     for case let item as URL in enumerator {
@@ -35,31 +78,27 @@ class FileHandler {
     }
 
     return files
+
   }
 
   func action(mapping: [Mapping], folders: [URL], options: Options) {
 
     for folder in folders {
       for map in mapping {
-        let files = getFilesInFolder(path: folder, filetypes: map.filetypes)
+
+        var files: [File] = []
+        if map.isCustom {
+          files = getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
+        } else {
+          files = getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
+        }
+
         for file in files {
           actionFileToFolder(file: file, destination: map.path, options: options)
         }
       }
     }
     dialogAnswered = false
-  }
-
-  fileprivate func keepFolderStructure(_ options: Options, _ destinationPath: inout URL, _ destination: URL, _ file: File) {
-    if(options.keepFolderStructure) //keep sub-folder structure
-    {
-      destinationPath = destination.appendingPathComponent(file.relativePath)
-
-      let subfolderPath = (destination.appendingPathComponent(file.relativePath)).deletingLastPathComponent()
-      if !filemanager.fileExists(atPath: subfolderPath.path) {
-        try? FileManager.default.createDirectory(at: subfolderPath, withIntermediateDirectories: true, attributes: nil)
-      }
-    }
   }
 
   func actionFileToFolder(file: File, destination: URL, options: Options) {
@@ -122,13 +161,25 @@ class FileHandler {
     }
   }
 
+  fileprivate func keepFolderStructure(_ options: Options, _ destinationPath: inout URL, _ destination: URL, _ file: File) {
+    if(options.keepFolderStructure) //keep sub-folder structure
+    {
+      destinationPath = destination.appendingPathComponent(file.relativePath)
+
+      let subfolderPath = (destination.appendingPathComponent(file.relativePath)).deletingLastPathComponent()
+      if !filemanager.fileExists(atPath: subfolderPath.path) {
+        try? FileManager.default.createDirectory(at: subfolderPath, withIntermediateDirectories: true, attributes: nil)
+      }
+    }
+  }
+
   func dialog(question: String, text: String) -> NSApplication.ModalResponse {
     let alert = NSAlert()
     alert.messageText = question
     alert.informativeText = text
     alert.alertStyle = .critical
     alert.addButton(withTitle: "Overwrite")
-    alert.addButton(withTitle: "Rename & Copy")
+    alert.addButton(withTitle: "Rename & copy")
     alert.addButton(withTitle: "Ignore file")
     return alert.runModal()
   }
@@ -146,7 +197,14 @@ extension FileHandler {
       var folderList: [Folder] = []
 
       for folder in folders {
-        let files = getFilesInFolder(path: folder, filetypes: map.filetypes)
+
+        var files: [File] = []
+        if map.isCustom {
+          files = getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
+        } else {
+          files = getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
+        }
+
         folderList.append(Folder(path: folder, files: files))
       }
       previews.append(Previews(map: map, folder: folderList))
@@ -169,7 +227,14 @@ extension FileHandler {
       counter = 0
       size = 0
       for folder in folders {
-        let files = getFilesInFolder(path: folder, filetypes: map.filetypes)
+
+        var files: [File] = []
+        if map.isCustom {
+          files = getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
+        } else {
+          files = getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
+        }
+
         for file in files {
           counter += 1
           let fileAttributes = try? FileManager.default.attributesOfItem(atPath: file.path.path)
@@ -179,7 +244,12 @@ extension FileHandler {
         }
       }
 
-      stats.append(Stats(filetypes: map.filetypes, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
+      if map.isCustom {
+        stats.append(Stats(fileExtensions: map.fileExtensions!, isCustom: true, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
+      } else {
+        stats.append(Stats(fileType: map.fileType!, isCustom: false, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
+      }
+
     }
 
     return stats
@@ -195,16 +265,6 @@ extension FileHandler {
       factor += 1
     }
     return String(format: "%4.1f %@", value, tokens[factor])
-  }
-
-}
-
-extension FileHandler {
-
-  //https://developer.apple.com/library/archive/documentation/
-  //Miscellaneous/Reference/UTIRef/Articles/System-DeclaredUniformTypeIdentifiers.html#//apple_ref/doc/uid/TP40009259-SW1
-  func getUTI(path: URL) {
-
   }
 
 }
