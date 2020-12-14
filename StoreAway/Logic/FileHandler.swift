@@ -15,13 +15,11 @@ class FileHandler {
   var alwaysUseOption: NSApplication.ModalResponse = .alertThirdButtonReturn
   var dialogAnswered: Bool = false
 
-  func checkTyping(types: [UTType], supertype: UTType) -> Bool {
-    for type in types {
-      if type.conforms(to: supertype) {
-        return true
-      }
-    }
-    return false
+  private var currentFileName: String = ""
+  private var currentDestinationPath: URL = URL(fileURLWithPath: "")
+
+  private func checkTyping(types: [UTType], supertype: UTType) -> Bool {
+    return types.contains(where: { $0.conforms(to: supertype)})
   }
 
   func getFilesInFolderByUTType(path: URL, filetype: UTType) -> [File] {
@@ -64,7 +62,6 @@ class FileHandler {
                                             options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
                                               print("directoryEnumerator error at \(url): ", error)
                                               return true
-
                                             })!
 
     for case let item as URL in enumerator {
@@ -101,35 +98,24 @@ class FileHandler {
     dialogAnswered = false
   }
 
-  func actionFileToFolder(file: File, destination: URL, options: Options) {
+  private func actionFileToFolder(file: File, destination: URL, options: Options) {
 
-    var filename = file.path.lastPathComponent
-    var destinationPath = (destination.appendingPathComponent(filename))
+    currentFileName = file.path.lastPathComponent
+    currentDestinationPath = (destination.appendingPathComponent(currentFileName))
 
-    keepFolderStructure(options, &destinationPath, destination, file)
+    if(options.keepFolderStructure) //keep sub-folder structure
+    {
+      createFolderStructure(destination, file)
+    }
 
-    if filemanager.fileExists(atPath: destinationPath.path) {
-      var answer: NSApplication.ModalResponse = .alertThirdButtonReturn
+    if filemanager.fileExists(atPath: currentDestinationPath.path) {
 
-      let question: String = options.askEveryFile
-                                      ? filename + " exists at " + (destinationPath.deletingLastPathComponent()).path + "/"
-                                      : "File(s) exist at " + (destinationPath.deletingLastPathComponent()).path + "/"
-
-      let text: String = options.askEveryFile ? "Replace file?" : "Replace all files?"
-
-      if !dialogAnswered {
-        DispatchQueue.main.sync { //call dialog from main thread -> exception when called from background thread
-          answer = dialog(question: question, text: text)
-        }
-        if !options.askEveryFile {
-          dialogAnswered = true
-          alwaysUseOption = answer
-        }
-      }
+      let answer = getUserResponse(options)
 
       switch options.askEveryFile ? answer : alwaysUseOption {
+
       case .alertFirstButtonReturn:
-        try? filemanager.removeItem(atPath: destinationPath.path)
+        try? filemanager.removeItem(atPath: currentDestinationPath.path)
 
       case .alertSecondButtonReturn:
         var counter = 0
@@ -137,9 +123,10 @@ class FileHandler {
           counter += 1
           let ext = file.path.pathExtension
           let temp = file.path.deletingPathExtension().lastPathComponent
-          filename = temp + " " + String(counter) + "." + ext
-          destinationPath = destinationPath.deletingLastPathComponent().appendingPathComponent(filename)
-        }while(filemanager.fileExists(atPath: destinationPath.path))
+          currentFileName = temp + " " + String(counter) + "." + ext
+          currentDestinationPath = currentDestinationPath.deletingLastPathComponent()
+                                      .appendingPathComponent(currentFileName)
+        }while(filemanager.fileExists(atPath: currentDestinationPath.path))
 
       case .alertThirdButtonReturn:
         return
@@ -149,11 +136,12 @@ class FileHandler {
       }
 
     }
+
     do {
       if options.copyObjects {
-        try filemanager.copyItem(atPath: file.path.path, toPath: destinationPath.path)
+        try filemanager.copyItem(atPath: file.path.path, toPath: currentDestinationPath.path)
       } else {
-        try filemanager.moveItem(atPath: file.path.path, toPath: destinationPath.path)
+        try filemanager.moveItem(atPath: file.path.path, toPath: currentDestinationPath.path)
       }
 
     } catch {
@@ -161,19 +149,39 @@ class FileHandler {
     }
   }
 
-  fileprivate func keepFolderStructure(_ options: Options, _ destinationPath: inout URL, _ destination: URL, _ file: File) {
-    if(options.keepFolderStructure) //keep sub-folder structure
-    {
-      destinationPath = destination.appendingPathComponent(file.relativePath)
+  private func createFolderStructure(_ destination: URL, _ file: File) {
+    currentDestinationPath = destination.appendingPathComponent(file.relativePath)
 
-      let subfolderPath = (destination.appendingPathComponent(file.relativePath)).deletingLastPathComponent()
-      if !filemanager.fileExists(atPath: subfolderPath.path) {
-        try? FileManager.default.createDirectory(at: subfolderPath, withIntermediateDirectories: true, attributes: nil)
-      }
+    let subfolderPath = (destination.appendingPathComponent(file.relativePath)).deletingLastPathComponent()
+    if !filemanager.fileExists(atPath: subfolderPath.path) {
+      try? FileManager.default.createDirectory(at: subfolderPath, withIntermediateDirectories: true, attributes: nil)
     }
   }
 
-  func dialog(question: String, text: String) -> NSApplication.ModalResponse {
+  private func getUserResponse(_ options: Options) -> NSApplication.ModalResponse {
+    var answer: NSApplication.ModalResponse = .alertThirdButtonReturn
+
+    let question: String = options.askEveryFile
+                                    ? currentFileName + " exists at "
+                                        + (currentDestinationPath.deletingLastPathComponent()).path + "/"
+                                    : "File(s) exist at " + (currentDestinationPath.deletingLastPathComponent()).path + "/"
+
+    let text: String = options.askEveryFile ? "Replace file?" : "Replace all files?"
+
+    if !dialogAnswered {
+      DispatchQueue.main.sync { //call dialog from main thread -> exception when called from background thread
+        answer = dialog(question: question, text: text)
+      }
+      if !options.askEveryFile {
+        dialogAnswered = true
+        alwaysUseOption = answer
+      }
+    }
+
+    return answer
+  }
+
+  private func dialog(question: String, text: String) -> NSApplication.ModalResponse {
     let alert = NSAlert()
     alert.messageText = question
     alert.informativeText = text

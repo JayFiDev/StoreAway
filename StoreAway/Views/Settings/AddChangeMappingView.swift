@@ -9,13 +9,8 @@ import SwiftUI
 
 struct AddChangeMappingView: View {
 
-  let input = InputHandler()
-  let types: [Type] = DefinedTypes.types
-
   @EnvironmentObject var data: DataHandler
   @Environment(\.presentationMode) var mode
-  var mapping: Mapping
-  var addNew: Bool = false
 
   @State var pathDisplay: String = ""
   @State var path: URL
@@ -23,7 +18,14 @@ struct AddChangeMappingView: View {
   @State var isCustom: Bool = false
   @State var typeChoice: Int = 0
 
+  let input = InputHandler()
+  let types: [Type] = DefinedTypes.types
+
+  var mapping: Mapping
+  var addNew: Bool = false
+
   init(mapping: Mapping, addNew: Bool) {
+
     self.mapping = mapping
     self._path = State(wrappedValue: mapping.path)
     self.addNew = addNew
@@ -35,9 +37,10 @@ struct AddChangeMappingView: View {
     }
 
     if !addNew {
-
-      if isCustom {
+      if mapping.isCustom {
         self._filetype = State(wrappedValue: mapping.fileExtensions!.joined(separator: ", "))
+        self._isCustom = State(wrappedValue: mapping.isCustom)
+        print("isCustom")
 
       } else {
 
@@ -55,52 +58,34 @@ struct AddChangeMappingView: View {
 
   }
 
-  fileprivate func createOrUpdateMapping() {
-    let temp = filetype.replacingOccurrences(of: " ", with: "")
-    let filetypes: [String] = temp.components(separatedBy: ",")
-
-    if !addNew {
-
-      if isCustom {
-        data.updateMapping(id: mapping.id, replaceWith: Mapping(id: mapping.id, path: path, fileExtensions: filetypes))
-      } else {
-        data.updateMapping(id: mapping.id, replaceWith: Mapping(id: mapping.id, path: path, fileType: types[typeChoice]))
-      }
-
-    } else {
-      if isCustom {
-        data.addMapping(path: path, fileExtensions: filetypes)
-      } else {
-        data.addMapping(path: path, fileType: types[typeChoice])
-      }
-    }
-  }
-
   var body: some View {
 
     VStack(alignment: .leading) {
 
       Group {
         Label(
-          title: { Text("Filetype") },
+          title: {
+            Text(isCustom ? "Extension" : "Filetype")
+          },
           icon: { Image(systemName: "doc.text.magnifyingglass") }
         )
 
         HStack {
-          Picker("", selection: $typeChoice) {
-            ForEach(0 ..< types.count) { index in
-              Text(self.types[index].displayString)
-                .tag(index)
+          if !isCustom {
+            Picker("", selection: $typeChoice) {
+              ForEach(0 ..< types.count) { index in
+                Text(self.types[index].displayString)
+                  .tag(index)
+              }
             }
+            .padding(.leading, -7.0)
+            .disabled(isCustom)
+          } else {
+            TextField("Filetype(s) [seperate by ,]", text: $filetype)
+              .frame(height: 20, alignment: .leading)
           }
-          .padding(.leading, -7.0)
           Toggle("custom", isOn: $isCustom)
         }
-
-        if isCustom {
-          TextField("Filetype(s) [seperate by ,]", text: $filetype).frame(width: 250, height: 20, alignment: .leading)
-        }
-
       }
 
       Divider().padding(.vertical, 2.0)
@@ -127,8 +112,9 @@ struct AddChangeMappingView: View {
           Text("Select destination")
         })
 
-        Divider().padding(.vertical, 2.0)
       }
+
+      Divider().padding(.vertical, 2.0)
 
       HStack {
         Button(action: {
@@ -152,6 +138,7 @@ struct AddChangeMappingView: View {
         Button(action: {
           data.removeMapping(id: mapping.id)
           self.mode.wrappedValue.dismiss()
+
         }, label: {
           Text("Delete").foregroundColor(.red)
         }).disabled(addNew)
@@ -160,6 +147,28 @@ struct AddChangeMappingView: View {
     }.padding(.all).frame(width: 320, height: 350, alignment: .topLeading)
 
   }
+
+  fileprivate func createOrUpdateMapping() {
+    let temp = filetype.replacingOccurrences(of: " ", with: "")
+    let filetypes: [String] = temp.components(separatedBy: ",")
+
+    if !addNew {
+
+      if isCustom {
+        data.updateMapping(id: mapping.id, replaceWith: Mapping(id: mapping.id, path: path, fileExtensions: filetypes))
+      } else {
+        data.updateMapping(id: mapping.id, replaceWith: Mapping(id: mapping.id, path: path, fileType: types[typeChoice]))
+      }
+
+    } else {
+      if isCustom {
+        data.addMapping(path: path, fileExtensions: filetypes)
+      } else {
+        data.addMapping(path: path, fileType: types[typeChoice])
+      }
+    }
+  }
+
 }
 
 struct AddChangeMappingView_Previews: PreviewProvider {

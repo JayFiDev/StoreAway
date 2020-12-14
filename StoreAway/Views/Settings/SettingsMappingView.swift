@@ -9,26 +9,27 @@ import SwiftUI
 
 struct SettingsMappingView: View {
 
-  @EnvironmentObject var userData: DataHandler
-  @State var selection: Mapping?
-
+  @EnvironmentObject var data: DataHandler
+  @ObservedObject var select = SelectionHandler()
   @State var showAddSheet = false
-  @State var showChangeSheet = false
 
   var body: some View {
     VStack {
-
-      List(userData.mappingData, id: \.self, selection: $selection) { mapping in
-          MappingView(mapping: mapping)
-
+      //, selection: $selection
+      List(data.mappingData, id: \.self) { mapping in
+        MappingView(mapping: mapping)
+          .contentShape(Rectangle())
+          .onTapGesture {
+            select.selectedMapping = mapping
+          }
       }
       .frame(width: 400,
-             height: self.userData.mappingData.count > 3 ? 320 : 15 + self.userData.mappingData.reduce(0) { index, _ in index + 80 }, alignment: .center)
-      .onChange(of: selection) { _ in
-          showChangeSheet = true
+             height: self.data.mappingData.count > 3 ? 320 : 15 + self.data.mappingData.reduce(0) { index, _ in index + 80 }, alignment: .center)
+      .sheet(isPresented: $select.selectionChanged) {
+        if select.selectedMapping != nil {
+          AddChangeMappingView(mapping: select.selectedMapping!, addNew: false )
 
-      }.sheet(isPresented: $showChangeSheet) {
-          AddChangeMappingView(mapping: selection!, addNew: false )
+        }
       }
 
       HStack {
