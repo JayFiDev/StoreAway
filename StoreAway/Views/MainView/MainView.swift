@@ -56,7 +56,7 @@ struct MainView: View {
         ZStack {
           Circle()
             .foregroundColor(.primary)
-            .frame(width: 205, height: 205)
+            .frame(width: 206, height: 206)
           Circle()
             .foregroundColor(hovering ? .accentColor : .gray)
             .frame(width: 200, height: 200)
@@ -81,7 +81,7 @@ struct MainView: View {
         ZStack {
           Circle()
             .foregroundColor(.primary)
-            .frame(width: 85, height: 85)
+            .frame(width: 86, height: 86)
           Circle()
             .foregroundColor(hoveringPreview ? .accentColor : .gray)
             .frame(width: 80, height: 80)
