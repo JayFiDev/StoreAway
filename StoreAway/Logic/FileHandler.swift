@@ -25,7 +25,6 @@ class FileHandler {
   func getFilesInFolderByUTType(path: URL, filetype: UTType) -> [File] {
 
     var files: [File] = []
-
     let resourceKeys: [URLResourceKey] = [.nameKey, .typeIdentifierKey]
     let enumerator = filemanager.enumerator(at: path, includingPropertiesForKeys: resourceKeys,
                                             options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
@@ -55,8 +54,8 @@ class FileHandler {
   }
 
   func getFilesInFolder(path: URL, filetypes: [String]) -> [File] {
-    var files: [File] = []
 
+    var files: [File] = []
     let resourceKeys: [URLResourceKey] = [.nameKey, .typeIdentifierKey]
     let enumerator = filemanager.enumerator(at: path, includingPropertiesForKeys: resourceKeys,
                                             options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
@@ -205,7 +204,6 @@ extension FileHandler {
       var folderList: [Folder] = []
 
       for folder in folders {
-
         var files: [File] = []
         if map.isCustom {
           files = getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
@@ -219,7 +217,6 @@ extension FileHandler {
     }
     return previews
   }
-
 }
 
 //statistic functions
@@ -257,7 +254,6 @@ extension FileHandler {
       } else {
         stats.append(Stats(fileType: map.fileType!, isCustom: false, numberOfFiles: counter, size: size, sizeString: sizeToString(size: size)))
       }
-
     }
 
     return stats

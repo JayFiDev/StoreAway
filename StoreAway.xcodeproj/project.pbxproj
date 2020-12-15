@@ -176,12 +176,12 @@
 		387A747625827D0800E0665B /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				384A1500255FDD120065534B /* MappingView.swift */,
 				384A150F255FE0390065534B /* Settings.swift */,
 				38A47E38256BFC29008FDA94 /* SettingsGeneralView.swift */,
-				384A151C25612F150065534B /* SettingsWatchedFolderView.swift */,
 				38BB47942566CC3100D9C197 /* SettingsMappingView.swift */,
+				384A1500255FDD120065534B /* MappingView.swift */,
 				387A74812582849700E0665B /* AddChangeMappingView.swift */,
+				384A151C25612F150065534B /* SettingsWatchedFolderView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";

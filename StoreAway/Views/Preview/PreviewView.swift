@@ -27,16 +27,15 @@ struct PreviewView: View {
         Text("Close")
       })
 
-    }.padding(.all)
+    }
+    .padding(.all)
     .frame(width: 900, height: 500, alignment: .center)
     .onAppear(perform: {
       userData.update()
       if userData.previews.count > 0 {
         selectedPreview = userData.previews.first
       }
-
     })
-
   }
 }
 

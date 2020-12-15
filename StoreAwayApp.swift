@@ -14,8 +14,7 @@ struct StoreAwayApp: App {
 
     var body: some Scene {
         WindowGroup {
-          MainView()
-            .environmentObject(userData)
+          MainView().environmentObject(userData)
         }
         .commands {
           CommandGroup(replacing: .help) {
@@ -40,6 +39,5 @@ struct StoreAwayApp: App {
           SettingsView()
             .environmentObject(userData)
         }
-
     }
 }
