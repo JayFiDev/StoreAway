@@ -17,7 +17,6 @@ struct MainView: View {
   @State private var showingAlert = false
   @State private var hovering = false
   @State private var isRunning = false
-
   @State private var hoveringPreview = false
   @State private var showPreview = false
   @State private var dragOver = false
@@ -113,17 +112,17 @@ struct MainView: View {
     .alert(isPresented: $showingAlert) {
       showEmptyMappingAlert()
     }
-    .onDrop(of: ["public.file-url"], isTargeted: $dragOver) {providers -> Bool in
-
-      for provider in providers {
-        provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, _) in
-          if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
-            print(url.path)
-          }
-        })
-      }
-      return true
-    }
+//    .onDrop(of: ["public.file-url"], isTargeted: $dragOver) {providers -> Bool in
+//
+//      for provider in providers {
+//        provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, _) in
+//          if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
+//            print(url.path)
+//          }
+//        })
+//      }
+//      return true
+//    }
 
   }
 }

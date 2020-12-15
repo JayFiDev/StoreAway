@@ -14,6 +14,7 @@ struct AddChangeMappingView: View {
 
   @State var pathDisplay: String = ""
   @State var path: URL
+  @State var pathSelected: Bool = false
   @State var filetype: String = ""
   @State var isCustom: Bool = false
   @State var typeChoice: Int = 0
@@ -31,12 +32,9 @@ struct AddChangeMappingView: View {
     self.addNew = addNew
 
     if !addNew {
+      self._pathSelected = State(wrappedValue: true)
       self._pathDisplay = State(wrappedValue: mapping.path.path)
-    } else {
-      self.pathDisplay = ""
-    }
 
-    if !addNew {
       if mapping.isCustom {
         self._filetype = State(wrappedValue: mapping.fileExtensions!.joined(separator: ", "))
         self._isCustom = State(wrappedValue: mapping.isCustom)
@@ -52,6 +50,7 @@ struct AddChangeMappingView: View {
 
       }
     } else {
+      self.pathDisplay = ""
       _typeChoice = State(initialValue: 0)
 
     }
@@ -106,6 +105,7 @@ struct AddChangeMappingView: View {
           if selectedFolder != nil {
             path = selectedFolder!
             pathDisplay = selectedFolder!.path
+            pathSelected = true
           }
 
         }, label: {
@@ -125,7 +125,7 @@ struct AddChangeMappingView: View {
 
         }, label: {
           Text("Save")
-        })
+        }).disabled(!pathSelected)
 
         Button(action: {
           self.mode.wrappedValue.dismiss()
@@ -149,6 +149,7 @@ struct AddChangeMappingView: View {
   }
 
   fileprivate func createOrUpdateMapping() {
+
     let temp = filetype.replacingOccurrences(of: " ", with: "")
     let filetypes: [String] = temp.components(separatedBy: ",")
 
