@@ -5,18 +5,29 @@ This application allows you to automatically move/copy files by filename extensi
 * Move your 3d printing files from the desktop to a combined folder. 
 * Backup your word or excel documents or move them to a different location.
 
-## Main View
-Light             |  Dark |  Dark with details
-:-------------------------:|:-------------------------:|:-------------------------:
-<img width="412" alt="Bildschirmfoto 2020-12-09 um 16 57 20" src="https://user-images.githubusercontent.com/40243830/101653541-b50fe300-3a3f-11eb-9a01-d398a9c15717.png"> | <img width="412" alt="Bildschirmfoto 2020-12-09 um 16 56 59" src="https://user-images.githubusercontent.com/40243830/101653551-b7723d00-3a3f-11eb-8d7a-0513ba117f85.png"> | <img width="668" alt="Bildschirmfoto 2020-12-09 um 16 54 30" src="https://user-images.githubusercontent.com/40243830/101653568-bd681e00-3a3f-11eb-9350-cecb13f2f9b1.png"> |
+## Presets
+__NOW__ with presets for different filetypes. Have all your images, videos and source code sorted automatically - or have a custom mapping for specific filename extentions.
+__Preset__ | __includes__ |
+:---:|:---:
+image | jpeg, png, bmp |
+video | mov, mpeg |
+audio | mp3, wav |
+sourcecode | c, h, cpp, hpp, swift |
+text | txt, rtf |
 
-## Preview
-<img width="1012" alt="Bildschirmfoto 2020-12-09 um 16 54 51" src="https://user-images.githubusercontent.com/40243830/101653894-28b1f000-3a40-11eb-8680-2c17120547b5.png">
+## Screenshots 
+### Main View
+Light             |    Dark with details
+:-------------------------:|:-------------------------:
+<img width="412" alt="Ligth" src="https://user-images.githubusercontent.com/40243830/102253703-f6a10200-3f07-11eb-933d-7b936846ae97.png"> | <img width="412" alt="Dark with details" src="https://user-images.githubusercontent.com/40243830/102253725-fbfe4c80-3f07-11eb-8d3f-ba34c360920e.png"> |
 
-## Settings View
+### Preview
+<img width="1012" alt="Preview Light" src="https://user-images.githubusercontent.com/40243830/102253898-3b2c9d80-3f08-11eb-815a-9446a3939ac2.png">
+
+### Settings View
 General             |  Mapping |   Watched Folders
 :-------------------------:|:-------------------------:|:-------------------------:
-<img width="512" alt="Bildschirmfoto 2020-12-09 um 16 55 19" src="https://user-images.githubusercontent.com/40243830/101653745-f30d0700-3a3f-11eb-87f8-bd308548618e.png"> | <img width="468" alt="Bildschirmfoto 2020-12-09 um 16 54 19" src="https://user-images.githubusercontent.com/40243830/101653758-f6a08e00-3a3f-11eb-9f06-ae2d512c4c2b.png"> | <img width="512" alt="Bildschirmfoto 2020-12-09 um 16 54 21" src="https://user-images.githubusercontent.com/40243830/101653761-f7d1bb00-3a3f-11eb-922f-a2aab9acb69d.png"> |
+<img width="512" alt="General settings" src="https://user-images.githubusercontent.com/40243830/102254046-6fa05980-3f08-11eb-873a-8dc38f07e2f2.png"> | <img width="468" alt="Mapping Settings" src="https://user-images.githubusercontent.com/40243830/102253955-4f709a80-3f08-11eb-94ac-7e8839f35f64.png"> | <img width="512" alt="Source Settings" src="https://user-images.githubusercontent.com/40243830/101653761-f7d1bb00-3a3f-11eb-922f-a2aab9acb69d.png"> |
 
 
 
