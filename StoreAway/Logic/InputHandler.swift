@@ -18,8 +18,8 @@ class InputHandler {
     dialog.showsResizeIndicator    = true
     dialog.showsHiddenFiles        = false
     dialog.allowsMultipleSelection = false
-    dialog.canChooseFiles = false
-    dialog.canChooseDirectories = true
+    dialog.canChooseFiles          = false
+    dialog.canChooseDirectories    = true
 
     if dialog.runModal() ==  NSApplication.ModalResponse.OK {
         let result = dialog.url // Pathname of the file

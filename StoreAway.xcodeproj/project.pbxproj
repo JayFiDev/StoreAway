@@ -145,8 +145,8 @@
 		384A14FA255FDCD80065534B /* Logic */ = {
 			isa = PBXGroup;
 			children = (
-				384A14FB255FDCE70065534B /* FileHandler.swift */,
 				384A150A255FDD590065534B /* DataHandler.swift */,
+				384A14FB255FDCE70065534B /* FileHandler.swift */,
 				384A1517255FEBE10065534B /* InputHandler.swift */,
 				384E4C4E257CC39A00CF2C07 /* BookmarkHandler.swift */,
 				384E4C51257CC87100CF2C07 /* UserDataHandler.swift */,
@@ -224,7 +224,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1220;
-				LastUpgradeCheck = 1220;
+				LastUpgradeCheck = 1230;
 				TargetAttributes = {
 					384A14C5255FDC970065534B = {
 						CreatedOnToolsVersion = 12.2;
@@ -438,6 +438,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = StoreAway/StoreAway.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"StoreAway/Preview Content\"";
@@ -461,6 +462,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = StoreAway/StoreAway.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"StoreAway/Preview Content\"";

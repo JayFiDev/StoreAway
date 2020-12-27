@@ -30,7 +30,6 @@ class FileHandler {
                                             options: [.skipsHiddenFiles], errorHandler: { (url, error) -> Bool in
                                               print("directoryEnumerator error at \(url): ", error)
                                               return true
-
                                             })!
 
     for case let item as URL in enumerator {
@@ -82,16 +81,14 @@ class FileHandler {
     for folder in folders {
       for map in mapping {
 
-        var files: [File] = []
-        if map.isCustom {
-          files = getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
-        } else {
-          files = getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
-        }
+        let files = map.isCustom
+          ? getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
+          : getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
 
-        for file in files {
+        files.forEach { (file) in
           actionFileToFolder(file: file, destination: map.path, options: options)
         }
+
       }
     }
     dialogAnswered = false
@@ -102,8 +99,7 @@ class FileHandler {
     currentFileName = file.path.lastPathComponent
     currentDestinationPath = (destination.appendingPathComponent(currentFileName))
 
-    if(options.keepFolderStructure) //keep sub-folder structure
-    {
+    if options.keepFolderStructure {
       createFolderStructure(destination, file)
     }
 
@@ -125,7 +121,7 @@ class FileHandler {
           currentFileName = temp + " " + String(counter) + "." + ext
           currentDestinationPath = currentDestinationPath.deletingLastPathComponent()
                                       .appendingPathComponent(currentFileName)
-        }while(filemanager.fileExists(atPath: currentDestinationPath.path))
+        } while filemanager.fileExists(atPath: currentDestinationPath.path)
 
       case .alertThirdButtonReturn:
         return
@@ -233,12 +229,9 @@ extension FileHandler {
       size = 0
       for folder in folders {
 
-        var files: [File] = []
-        if map.isCustom {
-          files = getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
-        } else {
-          files = getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
-        }
+        let files = map.isCustom
+            ? getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
+            : getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
 
         for file in files {
           counter += 1
