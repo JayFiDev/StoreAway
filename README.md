@@ -1,5 +1,9 @@
 # StoreAway
+
+<img align="left" width="128" height="128" src="https://user-images.githubusercontent.com/40243830/103172637-27acfb00-4855-11eb-9395-8bc7def2b07f.png">
+
 This application allows you to automatically move/copy files by filename extension to different destinations. Select the extension and destination you want, specify which folders should be searched for these files and you are good to go.
+</br></br></br>
 
 * Look at your download folder. Lots of different files from multiple sources for multiple projects. Move or copy them to the right place. 
 * Move your 3d printing files from the desktop to a combined folder. 
@@ -19,15 +23,15 @@ text | txt, rtf |
 ### Main View
 Light             |    Dark with details
 :-------------------------:|:-------------------------:
-<img width="412" alt="Ligth" src="https://user-images.githubusercontent.com/40243830/102253703-f6a10200-3f07-11eb-933d-7b936846ae97.png"> | <img width="412" alt="Dark with details" src="https://user-images.githubusercontent.com/40243830/102253725-fbfe4c80-3f07-11eb-8d3f-ba34c360920e.png"> |
+<img width="412" alt="Ligth" src="https://user-images.githubusercontent.com/40243830/103172565-b0776700-4854-11eb-9eb5-26136325cc4e.png"> | <img width="412" alt="Dark with details" src="https://user-images.githubusercontent.com/40243830/103172566-b2d9c100-4854-11eb-8188-2716ae656969.png"> |
 
 ### Preview
-<img width="1012" alt="Preview Light" src="https://user-images.githubusercontent.com/40243830/102253898-3b2c9d80-3f08-11eb-815a-9446a3939ac2.png">
+<img width="1012" alt="Preview Light" src="https://user-images.githubusercontent.com/40243830/103172581-c08f4680-4854-11eb-9621-3adf1a3ec4b4.png">
 
 ### Settings View
 General             |  Mapping |   Watched Folders
 :-------------------------:|:-------------------------:|:-------------------------:
-<img width="512" alt="General settings" src="https://user-images.githubusercontent.com/40243830/102254046-6fa05980-3f08-11eb-873a-8dc38f07e2f2.png"> | <img width="468" alt="Mapping Settings" src="https://user-images.githubusercontent.com/40243830/102253955-4f709a80-3f08-11eb-94ac-7e8839f35f64.png"> | <img width="512" alt="Source Settings" src="https://user-images.githubusercontent.com/40243830/101653761-f7d1bb00-3a3f-11eb-922f-a2aab9acb69d.png"> |
+<img width="512" alt="General settings" src="https://user-images.githubusercontent.com/40243830/103172591-cc7b0880-4854-11eb-9ddf-ef7a2045cc3f.png"> | <img width="468" alt="Mapping Settings" src="https://user-images.githubusercontent.com/40243830/103172598-d56bda00-4854-11eb-858e-aa8497304baa.png"> | <img width="512" alt="Source Settings" src="https://user-images.githubusercontent.com/40243830/103172605-dd2b7e80-4854-11eb-802b-158ced1ca954.png"> |
 
 
 
