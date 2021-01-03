@@ -9,6 +9,10 @@ This application allows you to automatically move/copy files by filename extensi
 * Move your 3d printing files from the desktop to a combined folder. 
 * Backup your word or excel documents or move them to a different location.
 
+## New features
+
+* Drag & Drop folders or files into the UI and have the stored away. 
+
 ## Presets
 __NOW__ with presets for different filetypes. Have all your images, videos and source code sorted automatically - or have a custom mapping for specific filename extentions.
 __Preset__ | __includes__ |
