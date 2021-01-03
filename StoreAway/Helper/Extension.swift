@@ -32,4 +32,13 @@ extension URL {
       relComponents.append(contentsOf: destComponents[inc...])
       return relComponents.joined(separator: "/")
   }
+
+  var isDirectory: Bool {
+      guard let values = try? resourceValues(forKeys: [.isDirectoryKey]),
+            let isDirectory = values.isDirectory else {
+          return false
+      }
+      return isDirectory
+  }
+
 }

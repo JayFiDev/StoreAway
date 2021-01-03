@@ -76,21 +76,74 @@ class FileHandler {
 
   }
 
+  func reduceListOfFilesByUTType(files: [URL], type: UTType) -> [File] {
+
+    var filteredFiles: [File] = []
+    for file in files {
+      let types = UTType.types(tag: file.pathExtension, tagClass: .filenameExtension, conformingTo: nil).filter { type in
+        return type.isPublic
+      }
+      if checkTyping(types: types, supertype: type) {
+        let filename = file.deletingPathExtension().lastPathComponent
+        let fileExtension = file.pathExtension
+
+        filteredFiles.append(File(path: file, relativePath: "", filename: filename, filetype: fileExtension))
+      }
+    }
+    return filteredFiles
+  }
+
+  func reduceListOfFilesByExtension(files: [URL], extensions: [String]) -> [File] {
+
+    var filteredFiles: [File] = []
+
+    for file in files {
+      if extensions.contains(file.pathExtension.lowercased()) {
+        let filename = file.deletingPathExtension().lastPathComponent
+        let filetype = file.pathExtension
+
+        filteredFiles.append(File(path: file, relativePath: "", filename: filename, filetype: filetype))
+      }
+    }
+
+    return filteredFiles
+
+  }
+
   func action(mapping: [Mapping], folders: [URL], options: Options) {
 
     for folder in folders {
       for map in mapping {
 
-        let files = map.isCustom
+        let foundFiles = map.isCustom
           ? getFilesInFolder(path: folder, filetypes: map.fileExtensions!)
           : getFilesInFolderByUTType(path: folder, filetype: map.fileType!.type)
 
-        files.forEach { (file) in
+        foundFiles.forEach { (file) in
           actionFileToFolder(file: file, destination: map.path, options: options)
         }
 
       }
     }
+    dialogAnswered = false
+  }
+
+  func actionFiles(mapping: [Mapping], files: [URL], options: Options) {
+
+    for map in mapping {
+      let filteredFiles = map.isCustom
+        ? reduceListOfFilesByExtension(files: files, extensions: map.fileExtensions!)
+        : reduceListOfFilesByUTType(files: files, type: map.fileType!.type)
+
+      filteredFiles.forEach { (file) in
+        actionFileToFolder(file: file, destination: map.path, options: Options(detailViewEnabled: options.detailViewEnabled,
+                                                                               copyObjects: options.copyObjects,
+                                                                               askEveryFile: options.askEveryFile,
+                                                                               keepFolderStructure: false))
+      }
+
+    }
+
     dialogAnswered = false
   }
 

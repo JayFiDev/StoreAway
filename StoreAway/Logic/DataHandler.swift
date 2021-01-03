@@ -120,4 +120,43 @@ class DataHandler: ObservableObject {
     bookmarkHandler.disableFileAccess()
   }
 
+  func dropAction(folders: [URL], files: [URL]) {
+    bookmarkHandler.enableFileAccess()
+    fileHandler.action(mapping: mappingData, folders: folders, options: options )
+    fileHandler.actionFiles(mapping: mappingData, files: files, options: options )
+
+    bookmarkHandler.disableFileAccess()
+  }
+
+  func dropHandler(_ providers: [NSItemProvider] ) -> Bool {
+
+    var tempFolders: [URL] = []
+    var tempFiles: [URL] = []
+    let group = DispatchGroup()
+
+    for provider in providers {
+      group.enter()
+      DispatchQueue.global().async {
+        provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, _) in
+          if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
+            if url.isDirectory {
+              tempFolders.append(url)
+            } else {
+              tempFiles.append(url)
+            }
+          }
+          group.leave()
+        })
+      }
+    }
+
+    group.wait()
+
+    DispatchQueue.global().async {
+      self.dropAction(folders: tempFolders, files: tempFiles)
+    }
+
+    return true
+    }
+
 }

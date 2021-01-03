@@ -25,20 +25,16 @@ struct MainView: View {
     if isRunning {
       return
     }
-    if userData.watchedFolders.count > 0
-        && userData.mappingData.count > 0 {
+    if userData.watchedFolders.count > 0 && userData.mappingData.count > 0 {
 
       isRunning = true
-
       DispatchQueue.global().async {
         userData.action()
-
         DispatchQueue.main.async {
           self.isRunning = false
           self.userData.update()
         }
       }
-
     } else {
       self.showingAlert = true
     }
@@ -51,7 +47,6 @@ struct MainView: View {
   var body: some View {
 
     HStack {
-
       VStack {
         ZStack {
           Circle()
@@ -65,9 +60,8 @@ struct MainView: View {
             ProgressView()
               .scaleEffect(1.25, anchor: .center)
           } else {
-            Text(!dragOver ? "Store away" : "Copy to folders" ).font(.title)
+            Text(!dragOver ? "Store away" : ( userData.options.copyObjects ? "Cove to folders" : "Mopy to folders") ).font(.title)
           }
-
         }
         .contentShape(Circle())
         .onHover(perform: { isHovering in
@@ -112,17 +106,9 @@ struct MainView: View {
     .alert(isPresented: $showingAlert) {
       showEmptyMappingAlert()
     }
-//    .onDrop(of: ["public.file-url"], isTargeted: $dragOver) {providers -> Bool in
-//
-//      for provider in providers {
-//        provider.loadDataRepresentation(forTypeIdentifier: "public.file-url", completionHandler: { (data, _) in
-//          if let data = data, let path = NSString(data: data, encoding: 4), let url = URL(string: path as String) {
-//            print(url.path)
-//          }
-//        })
-//      }
-//      return true
-//    }
+    .onDrop(of: ["public.file-url"], isTargeted: $dragOver) {providers -> Bool in
+      return userData.dropHandler(providers)
+    }
 
   }
 }
