@@ -34,6 +34,15 @@
 		38CF4A4D256F88F00072D0B4 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF4A4C256F88F00072D0B4 /* Preview.swift */; };
 		38CF4A50256F890E0072D0B4 /* Statistics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38CF4A4F256F890E0072D0B4 /* Statistics.swift */; };
 		38F5AA6925864F1A00593F7A /* Filetypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38F5AA6825864F1A00593F7A /* Filetypes.swift */; };
+		AA100001000000000000AAA2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100001000000000000AAA1 /* AppDelegate.swift */; };
+		AA100002000000000000AAA2 /* FolderWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100002000000000000AAA1 /* FolderWatcher.swift */; };
+		AA100003000000000000AAA2 /* LaunchAtLoginHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100003000000000000AAA1 /* LaunchAtLoginHandler.swift */; };
+		AA100004000000000000AAA2 /* NotificationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100004000000000000AAA1 /* NotificationHandler.swift */; };
+		AA100005000000000000AAA2 /* OperationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100005000000000000AAA1 /* OperationRecord.swift */; };
+		AA100006000000000000AAA2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100006000000000000AAA1 /* ContentView.swift */; };
+		AA100007000000000000AAA2 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100007000000000000AAA1 /* SidebarView.swift */; };
+		AA100008000000000000AAA2 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100008000000000000AAA1 /* DetailView.swift */; };
+		AA100009000000000000AAA2 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100009000000000000AAA1 /* HistoryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +76,15 @@
 		38CF4A4C256F88F00072D0B4 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		38CF4A4F256F890E0072D0B4 /* Statistics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Statistics.swift; sourceTree = "<group>"; };
 		38F5AA6825864F1A00593F7A /* Filetypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filetypes.swift; sourceTree = "<group>"; };
+		AA100001000000000000AAA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AA100002000000000000AAA1 /* FolderWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderWatcher.swift; sourceTree = "<group>"; };
+		AA100003000000000000AAA1 /* LaunchAtLoginHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAtLoginHandler.swift; sourceTree = "<group>"; };
+		AA100004000000000000AAA1 /* NotificationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHandler.swift; sourceTree = "<group>"; };
+		AA100005000000000000AAA1 /* OperationRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationRecord.swift; sourceTree = "<group>"; };
+		AA100006000000000000AAA1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AA100007000000000000AAA1 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		AA100008000000000000AAA1 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
+		AA100009000000000000AAA1 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				3896A4022566E1F00067F0BB /* StoreAwayApp.swift */,
+				AA100001000000000000AAA1 /* AppDelegate.swift */,
 				385EA01A2587EB2300CC9806 /* Helper */,
 				384A14FA255FDCD80065534B /* Logic */,
 				384A14F8255FDCB50065534B /* Model */,
@@ -128,6 +147,7 @@
 				38CF4A4F256F890E0072D0B4 /* Statistics.swift */,
 				38A89C75257CD11F009D8A7B /* Options.swift */,
 				38F5AA6825864F1A00593F7A /* Filetypes.swift */,
+				AA100005000000000000AAA1 /* OperationRecord.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -150,6 +170,9 @@
 				384A1517255FEBE10065534B /* InputHandler.swift */,
 				384E4C4E257CC39A00CF2C07 /* BookmarkHandler.swift */,
 				384E4C51257CC87100CF2C07 /* UserDataHandler.swift */,
+				AA100002000000000000AAA1 /* FolderWatcher.swift */,
+				AA100003000000000000AAA1 /* LaunchAtLoginHandler.swift */,
+				AA100004000000000000AAA1 /* NotificationHandler.swift */,
 			);
 			path = Logic;
 			sourceTree = "<group>";
@@ -169,6 +192,10 @@
 				384A14CB255FDC970065534B /* MainView.swift */,
 				38A47E46256D5152008FDA94 /* DetailStatisticView.swift */,
 				38A47E3C256C3832008FDA94 /* MainDetailView.swift */,
+				AA100006000000000000AAA1 /* ContentView.swift */,
+				AA100007000000000000AAA1 /* SidebarView.swift */,
+				AA100008000000000000AAA1 /* DetailView.swift */,
+				AA100009000000000000AAA1 /* HistoryView.swift */,
 			);
 			path = MainView;
 			sourceTree = "<group>";
@@ -311,6 +338,15 @@
 				38A47E47256D5152008FDA94 /* DetailStatisticView.swift in Sources */,
 				384A1506255FDD440065534B /* Mapping.swift in Sources */,
 				38F5AA6925864F1A00593F7A /* Filetypes.swift in Sources */,
+				AA100001000000000000AAA2 /* AppDelegate.swift in Sources */,
+				AA100002000000000000AAA2 /* FolderWatcher.swift in Sources */,
+				AA100003000000000000AAA2 /* LaunchAtLoginHandler.swift in Sources */,
+				AA100004000000000000AAA2 /* NotificationHandler.swift in Sources */,
+				AA100005000000000000AAA2 /* OperationRecord.swift in Sources */,
+				AA100006000000000000AAA2 /* ContentView.swift in Sources */,
+				AA100007000000000000AAA2 /* SidebarView.swift in Sources */,
+				AA100008000000000000AAA2 /* DetailView.swift in Sources */,
+				AA100009000000000000AAA2 /* HistoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,7 +404,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -423,7 +459,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
@@ -448,7 +484,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = JayFiDev.StoreAway;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -472,7 +508,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 0.5;
 				PRODUCT_BUNDLE_IDENTIFIER = JayFiDev.StoreAway;
 				PRODUCT_NAME = "$(TARGET_NAME)";

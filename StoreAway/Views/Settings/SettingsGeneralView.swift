@@ -12,44 +12,46 @@ struct SettingsGeneralView: View {
   @EnvironmentObject var userData: DataHandler
 
   var body: some View {
-    VStack(alignment: .leading) {
-
-      HStack {
-        Toggle(isOn: $userData.options.detailViewEnabled) {
-          Text("Show details")
-        }
-        Spacer()
+    Form {
+      Section("File Operations") {
+        Toggle("Copy instead of move", isOn: $userData.options.copyObjects)
+        Toggle("Ask for every file", isOn: $userData.options.askEveryFile)
+        Toggle("Keep folder structure", isOn: $userData.options.keepFolderStructure)
       }
 
-      Divider().frame(width: 380, height: 2, alignment: .center)
-
-      HStack {
-        Toggle(isOn: $userData.options.keepFolderStructure) {
-          Text("Keep folder structure")
+      Section("Automation") {
+        Toggle(isOn: $userData.options.autoOrganize) {
+          VStack(alignment: .leading, spacing: 2) {
+            Text("Auto-organize watched folders")
+            Text("Automatically move files when new items appear in watched folders.")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
         }
-        Spacer()
       }
 
-      Divider().frame(width: 380, height: 2, alignment: .center)
-
-      HStack {
-        Toggle(isOn: $userData.options.copyObjects) {
-          Text("Copy instead of move")
+      Section("System") {
+        Toggle(isOn: $userData.options.launchAtLogin) {
+          VStack(alignment: .leading, spacing: 2) {
+            Text("Launch at Login")
+            Text("Start StoreAway automatically when you log in.")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
         }
-        Spacer()
-      }
 
-      HStack {
-        Toggle(isOn: $userData.options.askEveryFile) {
-          Text("Ask for every file")
+        Toggle(isOn: $userData.options.showDockIcon) {
+          VStack(alignment: .leading, spacing: 2) {
+            Text("Show Dock icon")
+            Text("Show StoreAway in the Dock and App Switcher. Requires restart.")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
         }
-        Spacer()
       }
-
     }
-    .frame(width: 400)
-    .padding([.top, .leading, .bottom])
-
+    .formStyle(.grouped)
+    .frame(width: 420)
   }
 }
 

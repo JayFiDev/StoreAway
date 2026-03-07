@@ -12,4 +12,7 @@ struct Options: Hashable {
   var copyObjects: Bool
   var askEveryFile: Bool
   var keepFolderStructure: Bool
+  var autoOrganize: Bool
+  var launchAtLogin: Bool
+  var showDockIcon: Bool
 }
