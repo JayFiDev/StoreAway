@@ -43,6 +43,10 @@
 		AA100007000000000000AAA2 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100007000000000000AAA1 /* SidebarView.swift */; };
 		AA100008000000000000AAA2 /* DetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100008000000000000AAA1 /* DetailView.swift */; };
 		AA100009000000000000AAA2 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100009000000000000AAA1 /* HistoryView.swift */; };
+		BB100003000000000000BBB2 /* FileHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB100003000000000000BBB1 /* FileHandlerTests.swift */; };
+		BB100004000000000000BBB2 /* OperationRecordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB100004000000000000BBB1 /* OperationRecordTests.swift */; };
+		BB100005000000000000BBB2 /* MappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB100005000000000000BBB1 /* MappingTests.swift */; };
+		BB100006000000000000BBB2 /* UserDataHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB100006000000000000BBB1 /* UserDataHandlerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,10 +89,22 @@
 		AA100007000000000000AAA1 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		AA100008000000000000AAA1 /* DetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailView.swift; sourceTree = "<group>"; };
 		AA100009000000000000AAA1 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		BB100001000000000000BBB1 /* StoreAwayTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoreAwayTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB100003000000000000BBB1 /* FileHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandlerTests.swift; sourceTree = "<group>"; };
+		BB100004000000000000BBB1 /* OperationRecordTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OperationRecordTests.swift; sourceTree = "<group>"; };
+		BB100005000000000000BBB1 /* MappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MappingTests.swift; sourceTree = "<group>"; };
+		BB100006000000000000BBB1 /* UserDataHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataHandlerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		384A14C3255FDC970065534B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BB100011000000000000BBB1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -102,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				384A14C8255FDC970065534B /* StoreAway */,
+				BB100012000000000000BBB1 /* StoreAwayTests */,
 				384A14C7255FDC970065534B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -110,8 +127,20 @@
 			isa = PBXGroup;
 			children = (
 				384A14C6255FDC970065534B /* StoreAway.app */,
+				BB100001000000000000BBB1 /* StoreAwayTests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		BB100012000000000000BBB1 /* StoreAwayTests */ = {
+			isa = PBXGroup;
+			children = (
+				BB100003000000000000BBB1 /* FileHandlerTests.swift */,
+				BB100004000000000000BBB1 /* OperationRecordTests.swift */,
+				BB100005000000000000BBB1 /* MappingTests.swift */,
+				BB100006000000000000BBB1 /* UserDataHandlerTests.swift */,
+			);
+			path = StoreAwayTests;
 			sourceTree = "<group>";
 		};
 		384A14C8255FDC970065534B /* StoreAway */ = {
@@ -244,6 +273,23 @@
 			productReference = 384A14C6255FDC970065534B /* StoreAway.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BB100020000000000000BBB1 /* StoreAwayTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB100023000000000000BBB1 /* Build configuration list for PBXNativeTarget "StoreAwayTests" */;
+			buildPhases = (
+				BB100010000000000000BBB1 /* Sources */,
+				BB100011000000000000BBB1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BB100024000000000000BBB1 /* PBXTargetDependency */,
+			);
+			name = StoreAwayTests;
+			productName = StoreAwayTests;
+			productReference = BB100001000000000000BBB1 /* StoreAwayTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -255,6 +301,10 @@
 				TargetAttributes = {
 					384A14C5255FDC970065534B = {
 						CreatedOnToolsVersion = 12.2;
+					};
+					BB100020000000000000BBB1 = {
+						CreatedOnToolsVersion = 12.2;
+						TestTargetID = 384A14C5255FDC970065534B;
 					};
 				};
 			};
@@ -272,6 +322,7 @@
 			projectRoot = "";
 			targets = (
 				384A14C5255FDC970065534B /* StoreAway */,
+				BB100020000000000000BBB1 /* StoreAwayTests */,
 			);
 		};
 /* End PBXProject section */
@@ -350,7 +401,36 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB100010000000000000BBB1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB100003000000000000BBB2 /* FileHandlerTests.swift in Sources */,
+				BB100004000000000000BBB2 /* OperationRecordTests.swift in Sources */,
+				BB100005000000000000BBB2 /* MappingTests.swift in Sources */,
+				BB100006000000000000BBB2 /* UserDataHandlerTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXContainerItemProxy section */
+		BB100025000000000000BBB1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 384A14BE255FDC970065534B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 384A14C5255FDC970065534B;
+			remoteInfo = StoreAway;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXTargetDependency section */
+		BB100024000000000000BBB1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 384A14C5255FDC970065534B /* StoreAway */;
+			targetProxy = BB100025000000000000BBB1 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		384A14EA255FDC9A0065534B /* Debug */ = {
@@ -516,6 +596,36 @@
 			};
 			name = Release;
 		};
+		BB100021000000000000BBB1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = JayFiDev.StoreAwayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StoreAway.app/Contents/MacOS/StoreAway";
+			};
+			name = Debug;
+		};
+		BB100022000000000000BBB1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = JayFiDev.StoreAwayTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/StoreAway.app/Contents/MacOS/StoreAway";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -533,6 +643,15 @@
 			buildConfigurations = (
 				384A14ED255FDC9A0065534B /* Debug */,
 				384A14EE255FDC9A0065534B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB100023000000000000BBB1 /* Build configuration list for PBXNativeTarget "StoreAwayTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB100021000000000000BBB1 /* Debug */,
+				BB100022000000000000BBB1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
