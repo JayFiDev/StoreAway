@@ -11,6 +11,7 @@ import SwiftUI
 extension Notification.Name {
   static let storeAwayDidRun = Notification.Name("storeAwayDidRun")
   static let showPreviewNotification = Notification.Name("showPreviewNotification")
+  static let optionsDidChange = Notification.Name("optionsDidChange")
 }
 
 class DataHandler: ObservableObject {
@@ -33,6 +34,10 @@ class DataHandler: ObservableObject {
       }
       if options.launchAtLogin != oldValue.launchAtLogin {
         LaunchAtLoginHandler.setEnabled(options.launchAtLogin)
+      }
+      if options.showDockIcon != oldValue.showDockIcon ||
+         options.showMenuBarIcon != oldValue.showMenuBarIcon {
+        NotificationCenter.default.post(name: .optionsDidChange, object: nil)
       }
     }
   }

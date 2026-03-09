@@ -7,7 +7,7 @@ class UserDataHandlerTests: XCTestCase {
 
     // Keys written by UserDataHandler
     private let optionKeys = ["DetailView", "CopyOnly", "AskEveryFileDialog", "keepFolderStructure",
-                              "autoOrganize", "launchAtLogin", "showDockIcon"]
+                              "autoOrganize", "launchAtLogin", "showDockIcon", "showMenuBarIcon"]
     private let dataKeys = ["WatchedFolders", "Mapping", "OperationHistory"]
 
     override func setUp() {
@@ -28,16 +28,17 @@ class UserDataHandlerTests: XCTestCase {
 
     // MARK: - Options
 
-    func testOptions_defaultsAreAllFalse() {
-        // After removing all keys, loadOptions should return all-false Options
+    func testOptions_defaultValues() {
+        // After removing all keys, loadOptions should return default values
         let options = handler.loadOptions()
         XCTAssertFalse(options.detailViewEnabled)
         XCTAssertFalse(options.copyObjects)
         XCTAssertFalse(options.askEveryFile)
-        XCTAssertFalse(options.keepFolderStructure)
+        XCTAssertTrue(options.keepFolderStructure, "keepFolderStructure should default to true")
         XCTAssertFalse(options.autoOrganize)
         XCTAssertFalse(options.launchAtLogin)
-        XCTAssertFalse(options.showDockIcon)
+        XCTAssertTrue(options.showDockIcon, "showDockIcon should default to true")
+        XCTAssertFalse(options.showMenuBarIcon)
     }
 
     func testOptions_saveAndLoad_roundTrip() {
@@ -48,7 +49,8 @@ class UserDataHandlerTests: XCTestCase {
             keepFolderStructure: false,
             autoOrganize: true,
             launchAtLogin: false,
-            showDockIcon: true
+            showDockIcon: true,
+            showMenuBarIcon: true
         )
         handler.saveOptions(options: original)
         let loaded = handler.loadOptions()
@@ -60,6 +62,7 @@ class UserDataHandlerTests: XCTestCase {
         XCTAssertEqual(loaded.autoOrganize, original.autoOrganize)
         XCTAssertEqual(loaded.launchAtLogin, original.launchAtLogin)
         XCTAssertEqual(loaded.showDockIcon, original.showDockIcon)
+        XCTAssertEqual(loaded.showMenuBarIcon, original.showMenuBarIcon)
     }
 
     func testOptions_saveAndLoad_allTrue() {
@@ -70,7 +73,8 @@ class UserDataHandlerTests: XCTestCase {
             keepFolderStructure: true,
             autoOrganize: true,
             launchAtLogin: true,
-            showDockIcon: true
+            showDockIcon: true,
+            showMenuBarIcon: true
         )
         handler.saveOptions(options: allTrue)
         let loaded = handler.loadOptions()
@@ -82,6 +86,7 @@ class UserDataHandlerTests: XCTestCase {
         XCTAssertTrue(loaded.autoOrganize)
         XCTAssertTrue(loaded.launchAtLogin)
         XCTAssertTrue(loaded.showDockIcon)
+        XCTAssertTrue(loaded.showMenuBarIcon)
     }
 
     // MARK: - Watched Folders

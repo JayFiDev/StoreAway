@@ -43,7 +43,7 @@ class FolderWatcher {
     )
 
     if let stream = streamRef {
-      FSEventStreamSchedule(stream, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue as CFString)
+      FSEventStreamScheduleWithRunLoop(stream, CFRunLoopGetMain(), CFRunLoopMode.defaultMode.rawValue)
       FSEventStreamStart(stream)
       isActive = true
     }

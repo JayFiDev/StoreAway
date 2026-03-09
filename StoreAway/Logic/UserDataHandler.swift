@@ -20,16 +20,32 @@ class UserDataHandler {
     setBoolValue(for: "autoOrganize", value: options.autoOrganize)
     setBoolValue(for: "launchAtLogin", value: options.launchAtLogin)
     setBoolValue(for: "showDockIcon", value: options.showDockIcon)
+    setBoolValue(for: "showMenuBarIcon", value: options.showMenuBarIcon)
   }
 
   public func loadOptions() -> Options {
-    let detail = UserDefaults.standard.bool(forKey: "DetailView")
-    let copy = UserDefaults.standard.bool(forKey: "CopyOnly")
-    let askEvery = UserDefaults.standard.bool(forKey: "AskEveryFileDialog")
-    let keepFolder = UserDefaults.standard.bool(forKey: "keepFolderStructure")
-    let autoOrganize = UserDefaults.standard.bool(forKey: "autoOrganize")
-    let launchAtLogin = UserDefaults.standard.bool(forKey: "launchAtLogin")
-    let showDockIcon = UserDefaults.standard.bool(forKey: "showDockIcon")
+    let defaults = UserDefaults.standard
+
+    // Use object(forKey:) to detect if the key exists, then apply defaults for new installs
+    let detail = defaults.bool(forKey: "DetailView")
+    let copy = defaults.bool(forKey: "CopyOnly")
+    let askEvery = defaults.bool(forKey: "AskEveryFileDialog")
+
+    // keepFolderStructure defaults to true
+    let keepFolder = defaults.object(forKey: "keepFolderStructure") == nil
+      ? true
+      : defaults.bool(forKey: "keepFolderStructure")
+
+    let autoOrganize = defaults.bool(forKey: "autoOrganize")
+    let launchAtLogin = defaults.bool(forKey: "launchAtLogin")
+
+    // showDockIcon defaults to true
+    let showDockIcon = defaults.object(forKey: "showDockIcon") == nil
+      ? true
+      : defaults.bool(forKey: "showDockIcon")
+
+    // showMenuBarIcon defaults to false
+    let showMenuBarIcon = defaults.bool(forKey: "showMenuBarIcon")
 
     return Options(
       detailViewEnabled: detail,
@@ -38,7 +54,8 @@ class UserDataHandler {
       keepFolderStructure: keepFolder,
       autoOrganize: autoOrganize,
       launchAtLogin: launchAtLogin,
-      showDockIcon: showDockIcon
+      showDockIcon: showDockIcon,
+      showMenuBarIcon: showMenuBarIcon
     )
   }
 

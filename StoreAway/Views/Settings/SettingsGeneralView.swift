@@ -43,7 +43,16 @@ struct SettingsGeneralView: View {
         Toggle(isOn: $userData.options.showDockIcon) {
           VStack(alignment: .leading, spacing: 2) {
             Text("Show Dock icon")
-            Text("Show StoreAway in the Dock and App Switcher. Requires restart.")
+            Text("Show StoreAway in the Dock and App Switcher.")
+              .font(.caption)
+              .foregroundColor(.secondary)
+          }
+        }
+
+        Toggle(isOn: $userData.options.showMenuBarIcon) {
+          VStack(alignment: .leading, spacing: 2) {
+            Text("Show menu bar icon")
+            Text("Show StoreAway icon in the menu bar.")
               .font(.caption)
               .foregroundColor(.secondary)
           }

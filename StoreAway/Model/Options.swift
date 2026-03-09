@@ -15,4 +15,5 @@ struct Options: Hashable {
   var autoOrganize: Bool
   var launchAtLogin: Bool
   var showDockIcon: Bool
+  var showMenuBarIcon: Bool
 }

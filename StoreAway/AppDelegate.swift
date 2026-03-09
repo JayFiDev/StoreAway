@@ -15,7 +15,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   private var storeNowMenuItem: NSMenuItem?
 
   func applicationDidFinishLaunching(_ notification: Notification) {
-    setupStatusItem()
+    // Status item is created in setup() based on showMenuBarIcon setting
     NotificationHandler.requestAuthorization()
 
     NotificationCenter.default.addObserver(
@@ -34,11 +34,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
   func setup(dataHandler: DataHandler) {
     self.dataHandler = dataHandler
     updateStoreNowState()
+    updateMenuBarVisibility()
+    updateDockIconVisibility()
 
-    if dataHandler.options.showDockIcon {
+    // Observe option changes
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(handleOptionsChanged),
+      name: .optionsDidChange,
+      object: nil
+    )
+  }
+
+  @objc private func handleOptionsChanged() {
+    updateMenuBarVisibility()
+    updateDockIconVisibility()
+  }
+
+  private func updateDockIconVisibility() {
+    guard let handler = dataHandler else { return }
+    if handler.options.showDockIcon {
       NSApp.setActivationPolicy(.regular)
     } else {
       NSApp.setActivationPolicy(.accessory)
+    }
+  }
+
+  private func updateMenuBarVisibility() {
+    guard let handler = dataHandler else { return }
+    if handler.options.showMenuBarIcon {
+      if statusItem == nil {
+        setupStatusItem()
+      }
+    } else {
+      if let item = statusItem {
+        NSStatusBar.system.removeStatusItem(item)
+        statusItem = nil
+      }
     }
   }
 

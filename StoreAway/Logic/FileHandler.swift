@@ -150,7 +150,8 @@ class FileHandler {
           keepFolderStructure: false,
           autoOrganize: options.autoOrganize,
           launchAtLogin: options.launchAtLogin,
-          showDockIcon: options.showDockIcon
+          showDockIcon: options.showDockIcon,
+          showMenuBarIcon: options.showMenuBarIcon
         ))
       }
 
