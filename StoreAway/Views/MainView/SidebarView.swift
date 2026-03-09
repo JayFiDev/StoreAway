@@ -46,6 +46,7 @@ struct SidebarView: View {
           .buttonStyle(.plain)
           .foregroundColor(.accentColor)
           .help("Add new mapping")
+          .padding(.trailing, 12)
         }
       }
 
@@ -80,6 +81,7 @@ struct SidebarView: View {
           .buttonStyle(.plain)
           .foregroundColor(.accentColor)
           .help("Add watched folder")
+          .padding(.trailing, 12)
         }
       }
     }
