@@ -10,34 +10,36 @@ import SwiftUI
 @main
 struct StoreAwayApp: App {
 
-    var userData = DataHandler()
+  @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+  @StateObject var userData = DataHandler()
 
-    var body: some Scene {
-        WindowGroup {
-          MainView().environmentObject(userData)
-        }
-        .commands {
-          CommandGroup(replacing: .help) {
-            Button("Help") {
-              if let url = URL(string: "https://github.com/JayFiDev/StoreAway") {
-                      NSWorkspace.shared.open(url)
-                  }
-            }
-          }
-          //removing of not needed items in menubar
-          CommandGroup(replacing: .windowArrangement) { }
-          CommandGroup(replacing: .windowList) { }
-          CommandGroup(replacing: .windowSize) { }
-          CommandGroup(replacing: .toolbar) { }
-          CommandGroup(replacing: .systemServices) { }
-          CommandGroup(replacing: .sidebar) { }
-          CommandGroup(replacing: .saveItem) { }
-
-        }
-
-        Settings {
-          SettingsView()
-            .environmentObject(userData)
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
+        .environmentObject(userData)
+        .onAppear {
+          appDelegate.setup(dataHandler: userData)
         }
     }
+    .commands {
+      CommandGroup(replacing: .appSettings) {
+        if #available(macOS 14.0, *) {
+          SettingsLink {
+            Text("Settings...")
+          }
+          .keyboardShortcut(",", modifiers: .command)
+        } else {
+          Button("Settings...") {
+            NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+          }
+          .keyboardShortcut(",", modifiers: .command)
+        }
+      }
+    }
+
+    Settings {
+      SettingsView()
+        .environmentObject(userData)
+    }
+  }
 }

@@ -15,6 +15,9 @@ class FileHandler {
   var alwaysUseOption: NSApplication.ModalResponse = .alertThirdButtonReturn
   var dialogAnswered: Bool = false
 
+  private(set) var lastMovedCount: Int = 0
+  private(set) var lastCopiedCount: Int = 0
+
   private var currentFileName: String = ""
   private var currentDestinationPath: URL = URL(fileURLWithPath: "")
 
@@ -111,6 +114,8 @@ class FileHandler {
   }
 
   func action(mapping: [Mapping], folders: [URL], options: Options) {
+    lastMovedCount = 0
+    lastCopiedCount = 0
 
     for folder in folders {
       for map in mapping {
@@ -129,6 +134,8 @@ class FileHandler {
   }
 
   func actionFiles(mapping: [Mapping], files: [URL], options: Options) {
+    lastMovedCount = 0
+    lastCopiedCount = 0
 
     for map in mapping {
       let filteredFiles = map.isCustom
@@ -136,10 +143,16 @@ class FileHandler {
         : reduceListOfFilesByUTType(files: files, type: map.fileType!.type)
 
       filteredFiles.forEach { (file) in
-        actionFileToFolder(file: file, destination: map.path, options: Options(detailViewEnabled: options.detailViewEnabled,
-                                                                               copyObjects: options.copyObjects,
-                                                                               askEveryFile: options.askEveryFile,
-                                                                               keepFolderStructure: false))
+        actionFileToFolder(file: file, destination: map.path, options: Options(
+          detailViewEnabled: options.detailViewEnabled,
+          copyObjects: options.copyObjects,
+          askEveryFile: options.askEveryFile,
+          keepFolderStructure: false,
+          autoOrganize: options.autoOrganize,
+          launchAtLogin: options.launchAtLogin,
+          showDockIcon: options.showDockIcon,
+          showMenuBarIcon: options.showMenuBarIcon
+        ))
       }
 
     }
@@ -188,8 +201,10 @@ class FileHandler {
     do {
       if options.copyObjects {
         try filemanager.copyItem(atPath: file.path.path, toPath: currentDestinationPath.path)
+        lastCopiedCount += 1
       } else {
         try filemanager.moveItem(atPath: file.path.path, toPath: currentDestinationPath.path)
+        lastMovedCount += 1
       }
 
     } catch {
